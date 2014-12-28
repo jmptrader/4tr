@@ -1,22 +1,24 @@
-/*
+  # Code Styleguide
 
   All code in any code-base should look like a single person typed it, no matter how many people contributed.
 
-  Code Styleguide
-  https://github.com/rwaldron/idiomatic.js
+  ## Styleguide Reference
+  [idiomatic.js](https://github.com/rwaldron/idiomatic.js)
 
-  Styleguide Enforcement
-  https://github.com/einars/js-beautify
+  ## js-beautify Styleguide Enforcement
+  [js-beautify](https://github.com/einars/js-beautify)
   
   The js-beautify plugin overrides the deaults with options specified in .jsbeautifyrc files.
   
   In order of precedence, he plugin looks for .jsbeautifyrc in the following places:
-    1) The same directory as the source file you're prettifying 
-    2) The nearest parent directory above the file
-    3) In your home directory if everything else fails
+    1. The same directory as the source file you're prettifying 
+    2. The nearest parent directory above the file
+    3. In your home directory if everything else fails
 
-  Default js-beautify Options
+  ### Default js-beautify Options
 
+```javascript
+{
   "html": {
     
     // List of extensions that are allowed
@@ -76,23 +78,4 @@
     "wrap_line_length": 0               // Wrap lines at next opportunity after N characters
   }
 }
-*/
-
-
-// Override defaults with:
-{
-  "html": {
-    "allowed_file_extensions": ["html"],
-    "indent_size": 2
-  },
-
-  "css": {
-    "allowed_file_extensions": ["css"],
-    "indent_size": 2
-  },
-
-  "js": {
-    "allowed_file_extensions": ["js", "json", "jshintrc", "jsbeautifyrc"],
-    "indent_size": 2,
-  }
-}
+```

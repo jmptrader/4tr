@@ -8,6 +8,7 @@ All code in any code-base should look like a single person typed it, no matter h
 The js-beautify plugin overrides the deaults with options specified in .jsbeautifyrc files.
   
 In order of precedence, he plugin looks for .jsbeautifyrc in the following places:
+
 1. The same directory as the source file you're prettifying 
 2. The nearest parent directory above the file
 3. In your home directory if everything else fails

@@ -10,6 +10,24 @@ module.exports = function (grunt) {
   // Task configurations
   grunt.initConfig({
 
+    
+    /*--------------------------------*
+     *        Code Conventions        *
+     *--------------------------------*/
+
+    jshint: {
+      options: {
+        jshintrc: '.jshintrc',
+        ignores: ['tests/coverage/**/*.js']
+      },
+      files: {
+        src: ['models/**/*.js', 'tests/**/*.js']
+      },
+      gruntfile: {
+        src: 'Gruntfile.js'
+      }
+    },
+
 
     /*--------------------------------*
      *          Test suite            *
@@ -127,6 +145,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-env');
   grunt.loadNpmTasks('grunt-istanbul');
   grunt.loadNpmTasks('grunt-istanbul-coverage');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
 
   // Define tasks -----------------------
@@ -137,7 +156,7 @@ module.exports = function (grunt) {
   grunt.registerTask('integration', ['mochaTest:integration']);  
 
   // Regsiter code coverage tasks
-  grunt.registerTask('cover', ['clean', 'copy:application', 'env:coverage', 'instrument', 'test', 'storeCoverage', 'makeReport', 'coverage']);
+  grunt.registerTask('cover', ['jshint', 'clean', 'copy:application', 'env:coverage', 'instrument', 'test', 'storeCoverage', 'makeReport', 'coverage']);
 
   // Default task sequyence
   grunt.registerTask('default', ['unit']);

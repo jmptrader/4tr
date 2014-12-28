@@ -15,6 +15,7 @@ module.exports = function (grunt) {
      *        Code Conventions        *
      *--------------------------------*/
 
+    // Static code analysis and code style enforcement
     jshint: {
       options: {
         jshintrc: '.jshintrc',
@@ -25,6 +26,57 @@ module.exports = function (grunt) {
       },
       gruntfile: {
         src: 'Gruntfile.js'
+      }
+    },
+
+    // Code formatting : https://www.npmjs.com/package/grunt-jsbeautifier
+    // Exclude files : ['!foo/bar.js'],
+    jsbeautifier : {
+      modify: {
+        src: ['Gruntfile.js', 'models/**/*.js'],
+        options: {
+          config: '.jsbeautifyrc'
+        }
+      },
+      verify: {
+        src: ['Gruntfile.js', 'models/**/*.js'],
+        options: {
+          mode: 'VERIFY_ONLY',
+          config: '.jsbeautifyrc'
+          // html: {
+          //     braceStyle: "collapse",
+          //     indentChar: " ",
+          //     indentScripts: "keep",
+          //     indentSize: 2,
+          //     maxPreserveNewlines: 10,
+          //     preserveNewlines: true,
+          //     unformatted: ["a", "sub", "sup", "b", "i", "u"],
+          //     wrapLineLength: 0
+          // },
+          // css: {
+          //     indentChar: " ",
+          //     indentSize: 2
+          // },
+          // js: {
+          //     braceStyle: "collapse",
+          //     breakChainedMethods: false,
+          //     e4x: false,
+          //     evalCode: false,
+          //     indentChar: " ",
+          //     indentLevel: 0,
+          //     indentSize: 2,
+          //     indentWithTabs: false,
+          //     jslintHappy: false,
+          //     keepArrayIndentation: false,
+          //     keepFunctionIndentation: false,
+          //     maxPreserveNewlines: 10,
+          //     preserveNewlines: true,
+          //     spaceBeforeConditional: true,
+          //     spaceInParen: false,
+          //     unescapeStrings: false,
+          //     wrapLineLength: 0
+          // }
+        }
       }
     },
 
@@ -183,11 +235,16 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-istanbul');
   grunt.loadNpmTasks('grunt-istanbul-coverage');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-jsbeautifier');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('nodemon');
   grunt.loadNpmTasks('grunt-concurrent');
 
   // Define tasks -----------------------
+
+  // Check or enforce coding standards
+  grunt.registerTask('polish', ['jsbeautifier:modify', 'jshint']);
+  grunt.registerTask('verify', ['jsbeautifier:verify', 'jshint']);
 
   // Testing tasks
   grunt.registerTask('test', ['mochaTest:unit', 'mochaTest:integration']);  

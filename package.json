@@ -21,7 +21,8 @@
   "scripts": {
     "build": "grunt",
     "test": "mocha -R spec ./tests/**/*.spec.js",
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "verify": "grunt verify --verbose"
   },
   "devDependencies": {
     "chai": "^1.10.0",
@@ -34,6 +35,7 @@
     "grunt-env": "^0.4.2",
     "grunt-istanbul": "^0.4.0",
     "grunt-istanbul-coverage": "^0.1.0",
+    "grunt-jsbeautifier": "^0.2.7",
     "grunt-mocha-test": "^0.12.4",
     "grunt-not-constantinople": "0.0.5",
     "mocha": "^2.1.0",

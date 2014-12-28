@@ -1,21 +1,21 @@
-  # Code Styleguide
+# Code Styleguide
 
-  All code in any code-base should look like a single person typed it, no matter how many people contributed.
+All code in any code-base should look like a single person typed it, no matter how many people contributed.
 
-  ## Styleguide Reference
-  [idiomatic.js](https://github.com/rwaldron/idiomatic.js)
+## Styleguide Reference
+[idiomatic.js](https://github.com/rwaldron/idiomatic.js)
 
-  ## js-beautify Styleguide Enforcement
-  [js-beautify](https://github.com/einars/js-beautify)
+## Styleguide Enforcement with js-beautify
+[js-beautify](https://github.com/einars/js-beautify)
   
-  The js-beautify plugin overrides the deaults with options specified in .jsbeautifyrc files.
+The js-beautify plugin overrides the deaults with options specified in .jsbeautifyrc files.
   
   In order of precedence, he plugin looks for .jsbeautifyrc in the following places:
     1. The same directory as the source file you're prettifying 
     2. The nearest parent directory above the file
     3. In your home directory if everything else fails
 
-  ### Default js-beautify Options
+### Default js-beautify Options
 
 ```javascript
 {

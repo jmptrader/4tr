@@ -19,14 +19,23 @@
   ],
   "main": "index.js",
   "scripts": {
+    "build": "grunt",
+    "test": "mocha -R spec ./tests/**/*.spec.js",
     "start": "node ./bin/www"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "mocha": "^2.1.0",
     "chai": "^1.10.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-copy": "^0.7.0",
+    "grunt-env": "^0.4.2",
+    "grunt-istanbul": "^0.4.0",
+    "grunt-istanbul-coverage": "^0.1.0",
+    "grunt-mocha-test": "^0.12.4",
+    "grunt-not-constantinople": "0.0.5",
+    "mocha": "^2.1.0",
     "sinon": "^1.12.2",
-    "grunt-mocha-test": "^0.12.4"
+    "supertest": "^0.15.0"
   },
   "dependencies": {
     "express": "~4.9.0",

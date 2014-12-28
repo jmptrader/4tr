@@ -20,10 +20,10 @@ function itAsync(testLabel, testFunction) {
  * Clones / deep copies an object.
  *
  * @param Object obj
- *   Any object.
+ *   Any object
  *
  * @return Object
- *   obj--cloned.
+ *   obj--cloned
  *
 	describe('addOne Exemplary Tests', function() {
 	  var AddOne;
@@ -61,7 +61,6 @@ function itAsync(testLabel, testFunction) {
 	});
 
  */
-
 function clone(obj) {
     if (obj === null || typeof(obj) !== 'object') {
       return obj;

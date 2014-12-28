@@ -4,9 +4,9 @@
  * Represents a particular kind of input or output on a DeviceType (i.e. temperature, 
  * humidity, distance, etc)
  *
- * @param name Name of the channel type
- * @param units The units that the channel outputs data as
- * @param type Whether the channel is an input, output, or both
+ * @param String name   Name of the channel type
+ * @param String units  The units that the channel outputs data as
+ * @param String type   Whether the channel is an input, output, or both
  *
  * Example: new ChannelType('temperature');
  * 
@@ -24,6 +24,10 @@ ChannelType.prototype = {
 
   identity: function() {
     return this.type + ": " + this.name + " in " + this.units ;
+  },
+
+  noCovered: function() {
+    return "This should trigger a code coverage violation" ;
   }
 
 };

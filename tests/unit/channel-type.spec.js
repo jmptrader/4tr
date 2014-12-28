@@ -1,5 +1,13 @@
-// channel-type.spec.js
-var ChannelType = require('../../models/channel-type');
+
+// Without test coverage requireHelper
+//var ChannelType = require('../../models/channel-type');
+
+// Get the require helper that allows test coverage analysis
+var requireHelper = require('../helpers/require-helper');
+
+// Bring in the object we're going to test
+var ChannelType = requireHelper('channel-type');
+
 
 describe("ChannelType", function() {
 

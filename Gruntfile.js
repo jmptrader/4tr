@@ -132,7 +132,44 @@ module.exports = function (grunt) {
         root: 'tests',
         dir: 'coverage/reports/'
       }
-    }
+    },
+
+
+    /*--------------------------------*
+     *    Code Monitoring Triggers    *
+     *--------------------------------*/
+    
+    // Run tasks whenever watched files change
+    watch: {
+      lint: {
+        files: '<%= jshint.files.src %>',
+        tasks: 'jshint'
+      },
+      test: {
+        files: ['tests/unit/*.js'],
+        tasks: ['jshint', 'unit']
+      }
+    },
+
+    // Restart npm server whenever watched files change
+    nodemon: {
+      dev: {
+        script: 'app.js',
+        options: {
+          ext: 'js,json'
+        }
+      }
+    },
+
+    // Run two or more grunt tasks at once in seperate processes
+    concurrent: {
+      target: {
+        tasks: ['nodemon', 'watch'],
+        options: {
+          logConcurrentOutput: true
+        }
+      }
+    },
 
 
   });
@@ -146,20 +183,25 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-istanbul');
   grunt.loadNpmTasks('grunt-istanbul-coverage');
   grunt.loadNpmTasks('grunt-contrib-jshint');
-
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('nodemon');
+  grunt.loadNpmTasks('grunt-concurrent');
 
   // Define tasks -----------------------
 
-  // Regsiter testing tasks
+  // Testing tasks
   grunt.registerTask('test', ['mochaTest:unit', 'mochaTest:integration']);  
   grunt.registerTask('unit', ['mochaTest:unit']);  
   grunt.registerTask('integration', ['mochaTest:integration']);  
 
-  // Regsiter code coverage tasks
+  // Code coverage task
   grunt.registerTask('cover', ['jshint', 'clean', 'copy:application', 'env:coverage', 'instrument', 'test', 'storeCoverage', 'makeReport', 'coverage']);
 
-  // Default task sequyence
-  grunt.registerTask('default', ['unit']);
+  // Code monitoring - Watch for code changes and run tests or restart server as necessary
+  grunt.registerTask('server', ['concurrent:target']);
+
+  // Default to syntax help and code monitoring
+  grunt.registerTask('default', ['jshint', 'server']);
 
 
 };

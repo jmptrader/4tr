@@ -1,4 +1,9 @@
 
+// Setup chai expect 
+// Note: This is also set in chai-helper.js, but JShint complains if its not here too
+var chai = require('chai');
+var expect = chai.expect;
+
 // Without test coverage requireHelper
 //var ChannelType = require('../../models/channel-type');
 

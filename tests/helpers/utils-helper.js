@@ -66,10 +66,13 @@ function clone(obj) {
       return obj;
     }
 
-    var temp = new Object();
+    var temp = {},
+        key ;
 
-    for (var key in obj) {
-      temp[key] = clone(obj[key]);
+    for (key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        temp[key] = clone(obj[key]);
+      }
     }
     return temp;
 }

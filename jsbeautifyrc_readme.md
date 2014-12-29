@@ -5,7 +5,7 @@ All code in any code-base should look like a single person typed it, no matter h
 * Javascript syleguide reference is [idiomatic.js](https://github.com/rwaldron/idiomatic.js)
 * Styleguide enforced using [js-beautify](https://github.com/einars/js-beautify)
   
-The js-beautify plugin overrides the deaults with options specified in .jsbeautifyrc files.
+The js-beautify plugin overrides the deaults with options specified in **.jsbeautifyrc** files.
   
 In order of precedence, he plugin looks for .jsbeautifyrc in the following places:
 

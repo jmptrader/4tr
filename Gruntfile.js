@@ -1,5 +1,85 @@
 module.exports = function (grunt) {
 
+/* 
+
+  Practical Continuous Dployment
+  From: http://blogs.atlassian.com/2014/04/practical-continuous-deployment/
+
+  * Use an issue tracker for everything
+  * Create a separate branch for this work, tagged with the issue number
+  * Develop on this branch, and continuously test and integrate it
+  * Optional: Push your changes to a rush box
+  * When ready, create a pull request for the branch. All merges must come through a pull request
+  ** All pull requests must have approval from at least one reviewer
+  ** The Bamboo tests for this branch must pass.
+  * Merge and release
+  * Deploy to staging
+  * Promote to production
+
+  Deployment Sequence
+
+  Dev
+    setup
+      check dependencies
+      install
+      start services
+      healthchecks
+    branch ([issue-#]_[bugfix|feature|enhancement]
+      pull
+      branch
+    check style
+    coverage
+      clean
+      clone
+      instrument
+      test:unit
+      store coverage
+    build
+      preprocess
+      compile
+      generate docs
+      SASS
+      minify
+        JS
+        CSS
+    test:integration
+    test:functional
+    tar
+    deploy:ci
+  CI
+    test
+      unit
+      integration
+      functional
+    merge
+    bump version
+    tag in github
+    deploy:stage
+      upload
+      unpack
+      update symlink
+      restart server
+  Stage
+    test
+      unit
+      integration
+      functional
+      acceptance
+        health status for Reliability
+        benchmakr apis for Scalabilitiy
+        check usability
+        check security
+        check push mechanisims for Maintainability
+        check configurability
+        check compatibility against 3rd party APIs & clients
+        check transferability
+      Deploy:Production
+    deploy:production
+  Production
+    health checks
+
+*/
+
 
   // Prepare a banner
   var banner = '/*\n<%= pkg.name %> <%= pkg.version %>';
@@ -227,6 +307,7 @@ module.exports = function (grunt) {
   });
 
 
+
   // Load task plugins
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-clean');
@@ -240,7 +321,10 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('nodemon');
   grunt.loadNpmTasks('grunt-concurrent');
 
+
+
   // Define tasks -----------------------
+
 
   // Check or enforce coding standards
   grunt.registerTask('polish', ['jsbeautifier:modify', 'jshint']);

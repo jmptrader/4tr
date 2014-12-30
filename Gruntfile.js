@@ -81,6 +81,10 @@ module.exports = function (grunt) {
 */
 
 
+  // Load grunt tasks from package.json
+  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+
+
   // Prepare a banner
   var banner = '/*\n<%= pkg.name %> <%= pkg.version %>';
       banner += '- <%= pkg.description %>\n<%= pkg.repository.url %>\n';
@@ -90,7 +94,10 @@ module.exports = function (grunt) {
   // Task configurations
   grunt.initConfig({
 
+    // Pull in the package details
+    pkg: grunt.file.readJSON('package.json'),
     
+
     /*--------------------------------*
      *        Code Conventions        *
      *--------------------------------*/
@@ -123,39 +130,6 @@ module.exports = function (grunt) {
         options: {
           mode: 'VERIFY_ONLY',
           config: '.jsbeautifyrc'
-          // html: {
-          //     braceStyle: "collapse",
-          //     indentChar: " ",
-          //     indentScripts: "keep",
-          //     indentSize: 2,
-          //     maxPreserveNewlines: 10,
-          //     preserveNewlines: true,
-          //     unformatted: ["a", "sub", "sup", "b", "i", "u"],
-          //     wrapLineLength: 0
-          // },
-          // css: {
-          //     indentChar: " ",
-          //     indentSize: 2
-          // },
-          // js: {
-          //     braceStyle: "collapse",
-          //     breakChainedMethods: false,
-          //     e4x: false,
-          //     evalCode: false,
-          //     indentChar: " ",
-          //     indentLevel: 0,
-          //     indentSize: 2,
-          //     indentWithTabs: false,
-          //     jslintHappy: false,
-          //     keepArrayIndentation: false,
-          //     keepFunctionIndentation: false,
-          //     maxPreserveNewlines: 10,
-          //     preserveNewlines: true,
-          //     spaceBeforeConditional: true,
-          //     spaceInParen: false,
-          //     unescapeStrings: false,
-          //     wrapLineLength: 0
-          // }
         }
       }
     },
@@ -304,24 +278,55 @@ module.exports = function (grunt) {
     },
 
 
+    /*--------------------------------*
+     *    Code Monitoring Triggers    *
+     *--------------------------------*/
+
+    // Generate yuidoc via grunt-contrib-yuidoc
+    yuidoc: {
+      compile: {
+        name: '<%= pkg.name %>',
+        description: '<%= pkg.description %>',
+        version: '<%= pkg.version %>',
+        url: '<%= pkg.homepage %>',
+        // Options mirror cli flags http://yui.github.io/yuidoc/args/index.html
+        options: {
+          paths: 'models',
+          outdir: 'docs',
+          exclude: "lib,docs,build"
+        }
+      }
+    },
+
+    // Doc generation helpers
+    exec: {
+      // Prevents running everything with grunt exec (that would be weird)
+      blocker: {
+        cmd: 'echo "Do not run grunt exec by itself" && exit 1'
+      },
+
+      // Remove and rebuild the docs repository
+      docs_destroy: {
+        cmd: 'rm -rf docs'
+      }
+      // docs_init: {
+      //   cmd: 'git clone repo@myHost.ing:user/project-docs.git docs'
+      // },
+
+      // // checks for a working repository, checks for material to commit, and then performs a simple commit and a push
+      // docs_publish: {
+      //   // If we have initialized the docs directory, and if have something to commit, then commit it with the current message and then push
+      //   cmd: '[[ ! -d .git ]] && echo "docs directory not a repository - stopping..." || (git diff-index --quiet HEAD && echo "No changes to commit" || (git commit -a -m "Docs as of `date`" && git push))',
+      //   cwd: 'docs/'
+      // },
+
+      // // Verifies that we are on the branch that the docs should come from (master in this case)
+      // docs_branchCheck: {
+      //   cmd: '[[ "$(git rev-parse --abbrev-ref HEAD)" == "master" ]] || exit 1'
+      // }
+    }
+
   });
-
-
-
-  // Load task plugins
-  grunt.loadNpmTasks('grunt-mocha-test');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-env');
-  grunt.loadNpmTasks('grunt-istanbul');
-  grunt.loadNpmTasks('grunt-istanbul-coverage');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-jsbeautifier');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('nodemon');
-  grunt.loadNpmTasks('grunt-concurrent');
-
-
 
   // Define tasks -----------------------
 
@@ -336,7 +341,22 @@ module.exports = function (grunt) {
   grunt.registerTask('integration', ['mochaTest:integration']);  
 
   // Code coverage task
-  grunt.registerTask('cover', ['jshint', 'clean', 'copy:application', 'env:coverage', 'instrument', 'test', 'storeCoverage', 'makeReport', 'coverage']);
+  grunt.registerTask('cover', [
+    'jshint', 
+    'clean', 
+    'copy:application', 
+    'env:coverage', 
+    'instrument', 
+    'test', 
+    'storeCoverage', 
+    'makeReport', 
+    'coverage'
+  ]);
+
+  // Tasks for generating docs
+  grunt.registerTask('docs', ['exec:docs_destroy', 'yuidoc:compile']);
+  //grunt.registerTask('docs', ['exec:docs_branchCheck', 'yuidoc:compile', 'exec:docs_publish']);
+  //grunt.registerTask('docs_fix', ['exec:docs_destroy', 'exec:docs_init']);
 
   // Code monitoring - Watch for code changes and run tests or restart server as necessary
   grunt.registerTask('server', ['concurrent:target']);

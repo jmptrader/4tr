@@ -303,8 +303,7 @@ module.exports = function (grunt) {
         },
         compileSeperateFiles: {
             files: [
-                { src: "src/jacket.js", dest: "api/jacket.md" },
-                { src: "src/shirt.js", dest: "api/shirt.md" }
+                { src: "models/channel-type.js", dest: "api/cjannel-type.md" }
             ]
         }
         // withOptions: {
@@ -391,7 +390,7 @@ module.exports = function (grunt) {
 
   // Tasks for generating docs
   grunt.registerTask("doc", ['exec:docs_destroy', 'jsdocs', 'yuidocs']);
-  grunt.registerTask("jsdocs", ['jsdoc', 'jsdoc2md:compileSingleFile']);
+  grunt.registerTask("jsdocs", ['jsdoc', 'jsdoc2md']);
   grunt.registerTask('yuidocs', ['yuidoc:compile']);
   //grunt.registerTask('docs', ['exec:docs_branchCheck', 'yuidoc:compile', 'exec:docs_publish']);
   //grunt.registerTask('docs_fix', ['exec:docs_destroy', 'exec:docs_init']);

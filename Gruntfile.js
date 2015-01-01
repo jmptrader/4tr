@@ -96,7 +96,7 @@ module.exports = function (grunt) {
 
     // Pull in the package details
     pkg: grunt.file.readJSON('package.json'),
-    
+
 
     /*--------------------------------*
      *        Code Conventions        *
@@ -279,8 +279,42 @@ module.exports = function (grunt) {
 
 
     /*--------------------------------*
-     *    Code Monitoring Triggers    *
+     *      Project Documentation     *
      *--------------------------------*/
+
+
+     jsdoc : {
+        dist : {
+            //src: ['src/*.js', 'test/*.js'], 
+            src: ['models/**/*.js'], 
+            options: {
+              destination: 'docs/jsdoc'
+              //template : "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template",
+              //configure : "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template/jsdoc.conf.json"
+            }
+        }
+    },
+
+    // Generate jsdoc markdown via grunt-jsdoc-to-markdown
+    jsdoc2md: {
+        compileSingleFile: {
+            src: "models/**/*.js",
+            dest: "docs/jsdoc/<%= pkg.name %>_doc_markdown.md"
+        },
+        compileSeperateFiles: {
+            files: [
+                { src: "src/jacket.js", dest: "api/jacket.md" },
+                { src: "src/shirt.js", dest: "api/shirt.md" }
+            ]
+        }
+        // withOptions: {
+        //     options: {
+        //         index: true
+        //     },
+        //     src: "models/wardrobe.js",
+        //     dest: "doc/with-index.md"
+        // }
+    },
 
     // Generate yuidoc via grunt-contrib-yuidoc
     yuidoc: {
@@ -292,8 +326,10 @@ module.exports = function (grunt) {
         // Options mirror cli flags http://yui.github.io/yuidoc/args/index.html
         options: {
           paths: 'models',
-          outdir: 'docs',
-          exclude: "lib,docs,build"
+          outdir: 'docs/yuidoc',
+          exclude: "lib,docs,build",
+          themedir: "node_modules/yuidoc-bootstrap-theme",
+          helpers: ["node_modules/yuidoc-bootstrap-theme/helpers/helpers.js"]
         }
       }
     },
@@ -354,7 +390,9 @@ module.exports = function (grunt) {
   ]);
 
   // Tasks for generating docs
-  grunt.registerTask('docs', ['exec:docs_destroy', 'yuidoc:compile']);
+  grunt.registerTask("doc", ['exec:docs_destroy', 'jsdocs', 'yuidocs']);
+  grunt.registerTask("jsdocs", ['jsdoc', 'jsdoc2md:compileSingleFile']);
+  grunt.registerTask('yuidocs', ['yuidoc:compile']);
   //grunt.registerTask('docs', ['exec:docs_branchCheck', 'yuidoc:compile', 'exec:docs_publish']);
   //grunt.registerTask('docs_fix', ['exec:docs_destroy', 'exec:docs_init']);
 

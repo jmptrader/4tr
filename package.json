@@ -38,12 +38,16 @@
     "grunt-istanbul": "^0.4.0",
     "grunt-istanbul-coverage": "^0.1.0",
     "grunt-jsbeautifier": "^0.2.7",
+    "grunt-jsdoc": "^0.5.7",
+    "grunt-jsdoc-to-markdown": "^0.4.2",
     "grunt-mocha-test": "^0.12.4",
     "grunt-not-constantinople": "0.0.5",
     "mocha": "^2.1.0",
     "nodemon": "^1.2.1",
     "sinon": "^1.12.2",
-    "supertest": "^0.15.0"
+    "supertest": "^0.15.0",
+    "yuidoc-bootstrap-theme": "^1.0.4",
+    "yuidoc2md": "^0.4.8"
   },
   "dependencies": {
     "body-parser": "~1.8.1",

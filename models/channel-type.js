@@ -1,24 +1,27 @@
 // channel-type.js
 /**
 
-The ChannelType Represents a particular kind of input or output on a DeviceType.
+The ChannelType object represents a particular kind of input or output on a DeviceType.
 (i.e. temperature, humidity, distance, etc)
 
 @class ChannelType
+@summary Represents and Channel input/output
+@desc The ChannelType object represents a particular kind of input or output on a DeviceType. (i.e. temperature, humidity, distance, etc)
 
 @param type {string} Whether the channel is an input, output, or both
 @param name {string} Name of the channel type
 @param units {string} The units that the channel outputs data as
 
-@example
+@example <caption>Usage</caption>
 ```Javascript
-new ChannelType('input', 'temperature', 'F');
+var ct = new ChannelType('input', 'temperature', 'F');
 ```
 
 @constructor
 */
 function ChannelType(type, name, units) {
-  this.type   = type  || null;   // TODO: Convert input and output to constants
+  // TODO: Convert input and output to constants
+  this.type   = type  || null;
   this.name   = name  || "New channel";
   this.units  = units || null;
   this.stream = null;
@@ -29,7 +32,13 @@ ChannelType.prototype = {
 
 /**
 @method identity
-@return {string} A human readable descriptor in the format "<type>: <name> in <units>"
+@return {string} A human readable descriptor in the format "[type]: [name] in [units]"
+@example <caption>Usage</caption>
+```Javascript
+var ct = new ChannelType('input', 'temperature', 'F');
+ct.identity;
+// returns "input: temperature in F"
+```
 */
   identity: function() {
     return this.type + ": " + this.name + " in " + this.units ;

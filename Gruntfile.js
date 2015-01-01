@@ -282,6 +282,15 @@ module.exports = function (grunt) {
      *      Project Documentation     *
      *--------------------------------*/
 
+    // Generate docco doxs with 
+    docco: {
+      debug: {
+        src: ['models/**/*.js', 'tests/unit/**/*.js'],
+        options: {
+          output: 'docs/docco'
+        }
+      }
+    },
 
     // Generate JSDocs with 
     jsdoc : {
@@ -298,15 +307,15 @@ module.exports = function (grunt) {
 
     // Generate jsdoc markdown via grunt-jsdoc-to-markdown
     jsdoc2md: {
-        compileSingleFile: {
-            src: "models/**/*.js",
-            dest: "docs/jsdoc/<%= pkg.name %>_doc_markdown.md"
-        },
-        compileSeperateFiles: {
-            files: [
-                { src: "models/channel-type.js", dest: "api/cjannel-type.md" }
-            ]
-        }
+      compileSingleFile: {
+        src: "models/**/*.js",
+        dest: "docs/jsdoc/md/singlefile_doc_markdown_for_<%= pkg.name %>.md"
+      },
+      compileSeperateFiles: {
+        files: [
+          {src: "models/channel-type.js", dest: "docs/jsdoc/md/channel-type.md"}
+        ]
+      }
         // withOptions: {
         //     options: {
         //         index: true
@@ -390,7 +399,7 @@ module.exports = function (grunt) {
   ]);
 
   // Tasks for generating docs
-  grunt.registerTask("doc", ['exec:docs_destroy', 'jsdocs', 'yuidocs']);
+  grunt.registerTask("doc", ['exec:docs_destroy', 'docco', 'jsdocs', 'yuidocs']);
   grunt.registerTask("jsdocs", ['jsdoc', 'jsdoc2md']);
   grunt.registerTask('yuidocs', ['yuidoc:compile']);
   //grunt.registerTask('docs', ['exec:docs_branchCheck', 'yuidoc:compile', 'exec:docs_publish']);

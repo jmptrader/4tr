@@ -4,27 +4,55 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongo = require('mongoskin');
 
+// Setup www pages
 var routes = require('./routes/index');
-var users = require('./routes/users');
 
+// Setup APIs endpoints
+//var users = require('./routes/users');
+var apiCollections = require('./routes/api-collections');
+
+// Initialize the Express app
 var app = express();
 
-// view engine setup
+// Setup the view engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+// Favicon
+app.use(favicon(__dirname + '/public/favicon.ico'));
+
+// Logger
 app.use(logger('dev'));
+
+// Set the body parsers
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Configure cookies
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Mongo datastore setup
+// For remote URIs:   mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]
+var db = mongo.db('mongodb://@localhost:27017/4tr_dev', {safe:true});
+// var server = mongo.Server;
+// var mongoClient = mongo.MongoClient;
+// var replSetServers = mongo.ReplSetServers;
 
+// Make datastore accessible to our router
+app.use(function(req,res,next){
+    req.db = db;
+    next();
+});
+
+// Setup routes
 app.use('/', routes);
-app.use('/users', users);
+//app.use('/users', users);
+
+// All of the REST API routes will be prefixed by /api
+app.use('/api', apiCollections); 
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -33,10 +61,9 @@ app.use(function(req, res, next) {
     next(err);
 });
 
-// error handlers
+// Error handlers
 
-// development error handler
-// will print stacktrace
+// Development error handler will print stacktrace
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
@@ -47,8 +74,7 @@ if (app.get('env') === 'development') {
     });
 }
 
-// production error handler
-// no stacktraces leaked to user
+// Production error handler does not leak stacktraces to users
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {

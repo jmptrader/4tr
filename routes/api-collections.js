@@ -6,7 +6,7 @@ var router = express.Router();
 var app = express();
 
 // Get details from package.json for the healthcheck response
-var pkginfo = require('pkginfo')(module, 'name', 'version');
+var pkginfo = require('pkginfo')(module, 'name', 'version', 'build');
 //console.dir(module.exports);
 
 // Middleware to use for all requests
@@ -22,7 +22,8 @@ var status = {
 	  message: 'ok', 
 	  name: module.exports.name, 
 	  mode: app.settings.env, 
-	  version: module.exports.version 
+	  version: module.exports.version,
+	  build: module.exports.build
     };
 
 router.get('/', function(req, res) {

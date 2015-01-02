@@ -99,6 +99,55 @@ module.exports = function (grunt) {
 
 
     /*--------------------------------*
+     *        Release Automation      *
+     *--------------------------------*/
+
+    // Release automation with https://github.com/geddski/grunt-release
+    // grunt release
+    // grunt release:patch
+    // grunt release:minor
+    // grunt release:major
+    // grunt release:prerelease
+    release: {
+      options: {
+        bump: true,
+        file: 'package.json', 
+        add: true,
+        commit: true,
+        tag: false,             //default: true
+        push: true,
+        pushTags: false,        //default: true
+        npm: false,             //default: true
+        //folder: 'folder/to/publish/to/npm', //default project root
+        //tagName: 'some-tag-<%= version %>', //default: '<%= version %>'
+        commitMessage: 'Release <%= pkg.name %> v<%= version %>', //default: 'release <%= version %>'
+        //tagMessage: 'tagging version <%= version %>', //default: 'Version <%= version %>',
+        github: {
+          repo: 'jwtd/<%= pkg.name %>',   // Github repo here
+          usernameVar: 'GITHUB_USERNAME', //ENVIRONMENT VARIABLE that contains Github username
+          passwordVar: 'GITHUB_PASSWORD'  //ENVIRONMENT VARIABLE that contains Github password
+        }
+      }
+    },
+
+    // Maintain a build number in https://github.com/creynders/grunt-build-number
+    buildnumber: {
+      //files: ['package.json', 'bower.json'],
+      package : {}
+    },
+
+    // Get the git revision code
+    "git-describe": {
+      options: {
+        template: "{%=tag%}-{%=since%}-{%=object%}{%=dirty%}"
+      },
+      your_target: {
+        // Target-specific file lists and/or options go here.
+      },
+    },
+
+
+    /*--------------------------------*
      *        Code Conventions        *
      *--------------------------------*/
 
@@ -375,6 +424,33 @@ module.exports = function (grunt) {
 
   // Define tasks -----------------------
 
+  // Collect git info to determine a version tag
+  grunt.registerTask('saveRevision', function() {
+    grunt.event.once('git-describe', function (rev) {
+      grunt.option('gitRevision', rev);
+    });
+    grunt.task.run('git-describe');
+  });
+
+  // Save the git info to version.json
+  grunt.registerTask('tag-revision', 'Tag the current build revision', function () {
+    grunt.task.requires('git-describe');
+
+    grunt.file.write('public/version.json', JSON.stringify({
+      build: grunt.config('pkg.build'),
+      version: grunt.config('pkg.version'),
+      revision: grunt.option('gitRevision'),
+      date: grunt.template.today()
+    }));
+  });
+
+  // Generate/update a public/version.json
+  grunt.registerTask('version', ['saveRevision', 'tag-revision']);
+
+  grunt.registerTask('build', [
+    'buildnumber',   // Increment the build numbers
+    'version'        // Generate the version.json
+  ]); 
 
   // Check or enforce coding standards
   grunt.registerTask('polish', ['jsbeautifier:modify', 'jshint']);

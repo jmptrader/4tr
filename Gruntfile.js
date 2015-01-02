@@ -435,9 +435,10 @@ module.exports = function (grunt) {
   // Save the git info to version.json
   grunt.registerTask('tag-revision', 'Tag the current build revision', function () {
     grunt.task.requires('git-describe');
-
+    // Make sure our package details are current
+    var p = grunt.file.readJSON('package.json')
     grunt.file.write('public/version.json', JSON.stringify({
-      build: grunt.config('pkg.build'),
+      build: p.build,
       version: grunt.config('pkg.version'),
       revision: grunt.option('gitRevision'),
       date: grunt.template.today()
@@ -447,6 +448,7 @@ module.exports = function (grunt) {
   // Generate/update a public/version.json
   grunt.registerTask('version', ['saveRevision', 'tag-revision']);
 
+  // Bumps the build number and updates the version file
   grunt.registerTask('build', [
     'buildnumber',   // Increment the build numbers
     'version'        // Generate the version.json

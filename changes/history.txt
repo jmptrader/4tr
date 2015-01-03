@@ -1,0 +1,29 @@
+VERSION:0.0.1-258a411
+DATE:Fri Jan 02 2015 23:39:37
+
+IMPLEMENTED:
+- #12ea8f4 Jordan Duggan Tue Dec 30 00:35:43 2014 -0500: Added YUIDoc compile task
+- #5cb2ac8 Jordan Duggan Sun Dec 28 00:10:07 2014 -0500: Added code monitoring tasks via watch, nodemon, and concurrent
+- #3c7b07b Jordan Duggan Sat Dec 27 23:55:14 2014 -0500: Added jshint to coverage task
+OTHERS:
+- #258a411: Synchronized build number in package.json and version.json
+- #b1461f4: Added release automation and git build details
+- #5eb0878: Added status endpoint to base of REST API and setup collections endpoint for testing
+- #d33c9c8: Added docco generation and fixed JSDocs markdown output dest
+- #76a9287: Added JSDoc config file and setup SpaceLab theme
+- #c486c2a: Added JSDoc single file compilation
+- #931692e: Added JSDoc html and markdown doc generation
+- #040147d: Prepared gitignore foe docs generation
+- #6c13f5c: Added continuous deployment outline to grunfile and updated readme with semantic versioning
+- #d88b6ef: Fixed .jsbeautifyrc readme formatting
+- #5112012: Fixed .jsbeautifyrc readme formatting
+- #65eac3b: Fixed .jsbeautifyrc readme formatting
+- #5470acc: Cleaned up .jsbeautifyrc and added readme with default options
+- #faadab8: Added and tuned up .jsbeautifyrc and beautify
+- #b9c0f73: Added code coverage reporting and enforcement via istanbul
+- #4a97eec: Setup mocha, chai, sinon and confirmed config via ChannelType object
+- #0cd1d20: Express init
+- #46233d5: Initial grunt file and package.json
+- #839062d: Initial commit
+
+	*********

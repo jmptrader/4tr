@@ -80,6 +80,8 @@ module.exports = function (grunt) {
 
 */
 
+  // Lets time grunt execution
+  require('time-grunt')(grunt);
 
   // Load grunt tasks from package.json
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
@@ -90,17 +92,42 @@ module.exports = function (grunt) {
       banner += '- <%= pkg.description %>\n<%= pkg.repository.url %>\n';
       banner += 'Built on <%= grunt.template.today("yyyy-mm-dd") %>\n*/\n';
 
-
   // Task configurations
   grunt.initConfig({
 
     // Pull in the package details
     pkg: grunt.file.readJSON('package.json'),
 
-
     /*--------------------------------*
      *        Release Automation      *
      *--------------------------------*/
+
+    git_changelog: {
+      cwd: 'changes',
+      manifest: "../package.json",
+      history: "history.txt",
+      changelog: "changelog.txt",
+      changesSeparator: '\n\t*********',
+      masks: [
+        {
+          title: 'IMPLEMENTED:\n',
+          mask: /(([^\.]+\s)*(Task)(\s[^\.]+)*)/gim,
+          // see http://git-scm.com/docs/git-log for mapping content
+          format: ' - #%h %an %ad: %s %b', 
+        },
+        {
+          title: 'FIXED:\n',
+          mask: /(([^\.]+\s)*(Bug)(\s[^\.]+)*)/gim,
+          format: ' - #%h %an %ad: %s %b'
+        },
+        {
+          title: 'OTHERS:\n',
+          mask: /./gim,
+          format: ' - #%h: %s %b'
+        }
+      ]
+    },
+
 
     // Release automation with https://github.com/geddski/grunt-release
     // grunt release
@@ -315,6 +342,10 @@ module.exports = function (grunt) {
         }
       }
     },
+
+    /*--------------------------------*
+     *    Build Performance Helpers   *
+     *--------------------------------*/
 
     // Run two or more grunt tasks at once in seperate processes
     concurrent: {

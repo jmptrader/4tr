@@ -1,70 +1,73 @@
 {
-  "name": "4tr",
-  "version": "0.0.1",
-  "private": true,
-  "description": "4tr = Four The Record : A low level API for capturing time series data. Built with Node, Express, and InfluxDB",
-  "author": "Jordan Duggan",
-  "license": "MIT",
-  "homepage": "https://github.com/jwtd/4tr",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jwtd/4tr.git"
-  },
-  "bugs": {
-    "url": "https://github.com/jwtd/4tr/issues"
-  },
-  "keywords": [
-    "jwtd",
-    "4tr"
-  ],
-  "main": "index.js",
-  "scripts": {
-    "build": "grunt",
-    "test": "mocha -R spec ./tests/**/*.spec.js",
-    "start": "node ./bin/www",
-    "verify": "grunt verify --verbose"
-  },
-  "devDependencies": {
-    "chai": "^1.10.0",
-    "grunt": "^0.4.5",
-    "grunt-build-number": "^1.0.0",
-    "grunt-concurrent": "^1.0.0",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-copy": "^0.7.0",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-contrib-yuidoc": "^0.6.0",
-    "grunt-docco": "^0.3.3",
-    "grunt-env": "^0.4.2",
-    "grunt-exec": "^0.4.6",
-    "grunt-git-describe": "^2.3.2",
-    "grunt-istanbul": "^0.4.0",
-    "grunt-istanbul-coverage": "^0.1.0",
-    "grunt-jsbeautifier": "^0.2.7",
-    "grunt-jsdoc": "^0.5.7",
-    "grunt-jsdoc-to-markdown": "^0.4.2",
-    "grunt-mocha-test": "^0.12.4",
-    "grunt-release": "^0.9.0",
-    "ink-docstrap": "^0.4.12",
-    "mocha": "^2.1.0",
-    "nodemon": "^1.2.1",
-    "sinon": "^1.12.2",
-    "superagent": "^0.21.0",
-    "supertest": "^0.15.0",
-    "yuidoc-bootstrap-theme": "^1.0.4",
-    "yuidoc2md": "^0.4.8"
-  },
-  "dependencies": {
-    "body-parser": "~1.8.1",
-    "cookie-parser": "~1.3.3",
-    "debug": "~2.0.0",
-    "express": "~4.9.0",
-    "jade": "~1.6.0",
-    "matchdep": "^0.3.0",
-    "mongoskin": "^1.4.4",
-    "morgan": "~1.3.0",
-    "pkginfo": "^0.3.0",
-    "serve-favicon": "~2.1.3"
-  },
-  "build": "4"
+    "name": "4tr",
+    "version": "0.0.1",
+    "private": true,
+    "description": "4tr = Four The Record : A low level API for capturing time series data. Built with Node, Express, and InfluxDB",
+    "author": "Jordan Duggan",
+    "license": "MIT",
+    "homepage": "https://github.com/jwtd/4tr",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jwtd/4tr.git"
+    },
+    "bugs": {
+        "url": "https://github.com/jwtd/4tr/issues"
+    },
+    "keywords": [
+        "jwtd",
+        "4tr"
+    ],
+    "main": "index.js",
+    "scripts": {
+        "build": "grunt",
+        "test": "mocha -R spec ./tests/**/*.spec.js",
+        "start": "node ./bin/www",
+        "verify": "grunt verify --verbose"
+    },
+    "devDependencies": {
+        "chai": "^1.10.0",
+        "grunt": "^0.4.5",
+        "grunt-build-number": "^1.0.0",
+        "grunt-concurrent": "^1.0.0",
+        "grunt-contrib-clean": "^0.6.0",
+        "grunt-contrib-copy": "^0.7.0",
+        "grunt-contrib-jshint": "^0.10.0",
+        "grunt-contrib-watch": "^0.6.1",
+        "grunt-contrib-yuidoc": "^0.6.0",
+        "grunt-docco": "^0.3.3",
+        "grunt-env": "^0.4.2",
+        "grunt-exec": "^0.4.6",
+        "grunt-git-changelog": "^0.1.0",
+        "grunt-git-describe": "^2.3.2",
+        "grunt-istanbul": "^0.4.0",
+        "grunt-istanbul-coverage": "^0.1.0",
+        "grunt-jsbeautifier": "^0.2.7",
+        "grunt-jsdoc": "^0.5.7",
+        "grunt-jsdoc-to-markdown": "^0.4.2",
+        "grunt-mocha-test": "^0.12.4",
+        "grunt-release": "^0.9.0",
+        "ink-docstrap": "^0.4.12",
+        "mocha": "^2.1.0",
+        "nodemon": "^1.2.1",
+        "sinon": "^1.12.2",
+        "superagent": "^0.21.0",
+        "supertest": "^0.15.0",
+        "time-grunt": "^1.0.0",
+        "yuidoc-bootstrap-theme": "^1.0.4",
+        "yuidoc2md": "^0.4.8"
+    },
+    "dependencies": {
+        "body-parser": "~1.8.1",
+        "cookie-parser": "~1.3.3",
+        "debug": "~2.0.0",
+        "express": "~4.9.0",
+        "jade": "~1.6.0",
+        "matchdep": "^0.3.0",
+        "mongoskin": "^1.4.4",
+        "morgan": "~1.3.0",
+        "pkginfo": "^0.3.0",
+        "serve-favicon": "~2.1.3"
+    },
+    "build": "5",
+    "lastChangelog": "258a411"
 }

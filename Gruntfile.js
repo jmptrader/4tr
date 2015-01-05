@@ -80,17 +80,37 @@ module.exports = function (grunt) {
 
 */
 
+  // Prepare to calculate paths
+  var path = require('path');
+  var root = path.resolve();
+
   // Lets time grunt execution
   require('time-grunt')(grunt);
-
-  // Load grunt tasks from package.json
-  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
-
 
   // Prepare a banner
   var banner = '/*\n<%= pkg.name %> <%= pkg.version %>';
       banner += '- <%= pkg.description %>\n<%= pkg.repository.url %>\n';
       banner += 'Built on <%= grunt.template.today("yyyy-mm-dd") %>\n*/\n';
+
+  // Common paths for our tasks to use
+  
+  var p = {
+    githubAccount: "jwtd",
+    root: root,
+    //gruntConfigDir: "<%= p.root %>/grunt-base/config",
+    srcDir: root + "src",
+      modelsSrcDir: root + "/src/models",
+      routesSrcDir: root + "/src/routes",
+      viewsSrcDir: root + "/src/views",
+      docsSrcDir: root + "/src/docs",
+    testsDir: root + "/tests",
+    toolsDir: root + "/tools",
+    dataDir: root + "/data",
+    buildDir: root + "/build"
+    //sassDir: "<%= p.root %>/sass",
+    //cssDir: "<%= p.root %>/css",
+    //jsDir: "<%= p.root %>/js"
+  };
 
   // Task configurations
   grunt.initConfig({
@@ -98,15 +118,18 @@ module.exports = function (grunt) {
     // Pull in the package details
     pkg: grunt.file.readJSON('package.json'),
 
+    // Common paths for our tasks to use
+    p: p,
+   
     /*--------------------------------*
      *        Release Automation      *
      *--------------------------------*/
 
     git_changelog: {
       cwd: 'changes',
-      manifest: "../package.json",
-      history: "history.txt",
-      changelog: "changelog.txt",
+      manifest: "<%= p.root %>/package.json",
+      history: "<%= p.buildDir %>/docs/history.txt",
+      changelog: "<%= p.buildDir %>/docs/changelog.txt",
       changesSeparator: '\n\t*********',
       masks: [
         {
@@ -129,6 +152,45 @@ module.exports = function (grunt) {
     },
 
 
+    // Generate README.md using verb
+    verb: {
+      cwd: "src/docs/verb",
+      docs: "src/docs/verb",
+      data: [
+         "<%= p.root %>/package.json",
+         "<%= p.docsSrcDir %>/verb/*.{json,yml}"
+      ],
+      changelog: {
+        files:[ 
+          { 
+            src:  "changelog.tmpl.md", 
+            dest: "changelog.md"
+          }
+        ]
+      },
+      readme: {
+        // Where the template files are store
+        files:[ 
+          { 
+            src:  "src/docs/verb/README.tmpl.md", 
+            dest: "README.md"
+          }//,
+             // { 
+             //   src:  "<%= p.docsSrcDir %>/verb/README.tmpl.md", 
+             //   dest: "<%= p.root %>/README.md"
+             // },
+          // {
+          //   expand: true, 
+          //   cwd: '<%= p.docsSrcDir %>/verb', 
+          //   src: ['**/*.tmpl.md'], 
+          //   dest: '.', 
+          //   ext: '.md'
+          // },
+        ]
+      }
+    },
+
+
     // Release automation with https://github.com/geddski/grunt-release
     // grunt release
     // grunt release:patch
@@ -138,7 +200,7 @@ module.exports = function (grunt) {
     release: {
       options: {
         bump: true,
-        file: 'package.json', 
+        file: "<%= p.root %>/package.json", 
         add: true,
         commit: true,
         tag: false,             //default: true
@@ -146,11 +208,11 @@ module.exports = function (grunt) {
         pushTags: false,        //default: true
         npm: false,             //default: true
         //folder: 'folder/to/publish/to/npm', //default project root
-        //tagName: 'some-tag-<%= version %>', //default: '<%= version %>'
-        commitMessage: 'Release <%= pkg.name %> v<%= version %>', //default: 'release <%= version %>'
-        //tagMessage: 'tagging version <%= version %>', //default: 'Version <%= version %>',
+        //tagName: 'some-tag-<%= p.version %>', //default: '<%= p.version %>'
+        commitMessage: 'Release <%= p.pkg.name %> v<%= p.version %>', //default: 'release <%= p.version %>'
+        //tagMessage: 'tagging version <%= p.version %>', //default: 'Version <%= p.version %>',
         github: {
-          repo: 'jwtd/<%= pkg.name %>',   // Github repo here
+          repo: "<%= p.githubAccount %>/<%= p.pkg.name %>",   // Github repo here
           usernameVar: 'GITHUB_USERNAME', //ENVIRONMENT VARIABLE that contains Github username
           passwordVar: 'GITHUB_PASSWORD'  //ENVIRONMENT VARIABLE that contains Github password
         }
@@ -167,10 +229,7 @@ module.exports = function (grunt) {
     "git-describe": {
       options: {
         template: "{%=tag%}-{%=since%}-{%=object%}{%=dirty%}"
-      },
-      your_target: {
-        // Target-specific file lists and/or options go here.
-      },
+      }
     },
 
 
@@ -181,11 +240,11 @@ module.exports = function (grunt) {
     // Static code analysis and code style enforcement
     jshint: {
       options: {
-        jshintrc: '.jshintrc',
-        ignores: ['tests/coverage/**/*.js']
+        jshintrc: '<%= p.toolsDir %>/jshintrc.json',
+        ignores: ['<%= p.testsDir %>/coverage/**/*.js']
       },
       files: {
-        src: ['models/**/*.js', 'tests/**/*.js']
+        src: ['<%= p.modelsSrcDir %>/**/*.js', '<%= p.testsDir %>/**/*.js']
       },
       gruntfile: {
         src: 'Gruntfile.js'
@@ -195,17 +254,31 @@ module.exports = function (grunt) {
     // Code formatting : https://www.npmjs.com/package/grunt-jsbeautifier
     // Exclude files : ['!foo/bar.js'],
     jsbeautifier : {
+      // Make changes
       modify: {
-        src: ['Gruntfile.js', 'models/**/*.js'],
+        src: [
+          'Gruntfile.js',
+          'app.js',  
+          '<%= p.modelsSrcDir %>/**/*.js',
+          '<%= p.routesSrcDir %>/**/*.js',
+          '<%= p.testsDir %>/**/*.js'
+        ],
         options: {
-          config: '.jsbeautifyrc'
+          config: '<%= p.toolsDir %>/jsbeautifyrc.json'
         }
       },
+      // Check syntax only
       verify: {
-        src: ['Gruntfile.js', 'models/**/*.js'],
+        src: [
+          'Gruntfile.js',
+          'app.js',  
+          '<%= p.modelsSrcDir %>/**/*.js',
+          '<%= p.routesSrcDir %>/**/*.js',
+          '<%= p.testsDir %>/**/*.js'
+        ],
         options: {
           mode: 'VERIFY_ONLY',
-          config: '.jsbeautifyrc'
+          config: '<%= p.toolsDir %>/jsbeautifyrc.json'
         }
       }
     },
@@ -223,9 +296,9 @@ module.exports = function (grunt) {
           ui: 'bdd',
           reporter: 'spec',
           require: [
-            './tests/helpers/chai-helper', 
-            './tests/helpers/require-helper', 
-            './tests/helpers/utils-helper'
+            '<%= p.testsDir %>/helpers/chai-helper', 
+            '<%= p.testsDir %>/helpers/require-helper', 
+            '<%= p.testsDir %>/helpers/utils-helper'
           ]
         },
         src: ['tests/unit/**/*.spec.js']
@@ -237,12 +310,12 @@ module.exports = function (grunt) {
           ui: 'bdd',
           reporter: 'spec',
           require: [
-            './tests/helpers/chai-helper', 
-            './tests/helpers/require-helper', 
-            './tests/helpers/utils-helper'
+            '<%= p.testsDir %>/helpers/chai-helper', 
+            '<%= p.testsDir %>/helpers/require-helper', 
+            '<%= p.testsDir %>/helpers/utils-helper'
           ]
         },
-        src: ['tests/integration/**/*.spec.js']
+        src: ['<%= p.testsDir %>/integration/**/*.spec.js']
       } 
 
     },
@@ -255,7 +328,7 @@ module.exports = function (grunt) {
     // Clean out old test coverage reports before each run
     clean: {
       coverage: {
-        src: ['tests/coverage/']
+        src: ['<%= p.testsDir %>/coverage/']
       }
     },
 
@@ -264,40 +337,43 @@ module.exports = function (grunt) {
       application: {
         expand: true,
         flatten: true,
-        src: ['models/*'],
-        dest: 'tests/coverage/instrument/models'
+        src: ['<%= p.modelsSrcDir %>/*'],
+        dest: '<%= p.testsDir %>/coverage/instrument/models'
       }
     },
 
     // Add coverage instrumentation to the copies of the app files
     instrument: {
-      files: 'models/*.js',
+      files: [
+        '<%= p.modelsSrcDir %>/*.js',
+        '<%= p.routesSrcDir %>/*.js'
+      ],
       options: {
         lazy: false,
-        basePath: 'tests/coverage/instrument/'
+        basePath: '<%= p.testsDir %>/coverage/instrument/'
       }
     },
 
     // Point the test runner at the dir with the instrumentated app files
     env: {
       coverage: {
-        APP_DIR_FOR_CODE_COVERAGE: '../../tests/coverage/instrument/models/'
+        APP_DIR_FOR_CODE_COVERAGE: '<%= p.testsDir %>/coverage/instrument/models'
       }
     },
 
     // Save the raw coverage analysis data
     storeCoverage: {
       options: {
-        dir: 'tests/coverage/reports'
+        dir: '<%= p.testsDir %>/coverage/reports'
       }
     },
 
     // Generate a coverage report from the raw coverage analysis data
     makeReport: {
-      src: 'tests/coverage/reports/**/*.json',
+      src: '<%= p.testsDir %>/coverage/reports/**/*.json',
       options: {
         type: [ 'lcov', 'text' ],
-        dir: 'tests/coverage/reports',
+        dir: '<%= p.testsDir %>/coverage/reports',
         print: 'detail'
       }
     },
@@ -311,7 +387,7 @@ module.exports = function (grunt) {
           'lines': 90,
           'functions': 90
         },
-        root: 'tests',
+        root: '<%= p.testsDir %>',
         dir: 'coverage/reports/'
       }
     },
@@ -323,13 +399,31 @@ module.exports = function (grunt) {
     
     // Run tasks whenever watched files change
     watch: {
+      clear: {
+        //clear terminal on any watch task
+        //files: ['**/*'], 
+        //or be more specific
+        files: ['<%= p.testsDir %>/**/*'], 
+        tasks: ['clear']
+      },
       lint: {
-        files: '<%= jshint.files.src %>',
+        files: '<%= p.jshint.files.src %>',
         tasks: 'jshint'
       },
-      test: {
-        files: ['tests/unit/*.js'],
+      // test: {
+      //   files: [
+      //     '<%= p.testsDir %>/unit/*.js',
+      //     '<%= p.testsDir %>/integration/*.js'
+      //     ],
+      //   tasks: ['jshint', 'unit', 'integration']
+      // },
+      unit: {
+        files: ['<%= p.testsDir %>/unit/*.js'],
         tasks: ['jshint', 'unit']
+      },
+      integration: {
+        files: ['<%= p.testsDir %>/integration/*.js'],
+        tasks: ['jshint', 'integration']
       }
     },
 
@@ -342,6 +436,7 @@ module.exports = function (grunt) {
         }
       }
     },
+
 
     /*--------------------------------*
      *    Build Performance Helpers   *
@@ -365,9 +460,12 @@ module.exports = function (grunt) {
     // Generate docco doxs with 
     docco: {
       debug: {
-        src: ['models/**/*.js', 'tests/unit/**/*.js'],
+        src: [
+          '<%= p.modelsSrcDir %>/**/*.js', 
+          '<%= p.testsDir %>/unit/**/*.js'
+        ],
         options: {
-          output: 'docs/docco'
+          output: '<%= p.buildDir %>/docs/docco'
         }
       }
     },
@@ -376,11 +474,15 @@ module.exports = function (grunt) {
     jsdoc : {
       dist : {
         //src: ['src/*.js', 'test/*.js'], 
-        src: ['models/**/*.js'], 
+        src: [
+          '<%= p.modelsSrcDir %>/**/*.js',
+          '<%= p.routesSrcDir %>/**/*.js',
+          '<%= p.viewsSrcDir %>/**/*.js'
+        ], 
         options: {
-          destination: 'docs/jsdoc',
-          template: './node_modules/ink-docstrap/template',
-          configure: ".jsdoc"
+          destination: '<%= p.buildDir %>/docs/jsdoc',
+          template: '<%= p.root %>/node_modules/ink-docstrap/template',
+          configure: "<%= p.toolsDir %>/jsdoc.json"
         }
       }
     },
@@ -388,34 +490,45 @@ module.exports = function (grunt) {
     // Generate jsdoc markdown via grunt-jsdoc-to-markdown
     jsdoc2md: {
       compileSingleFile: {
-        src: "models/**/*.js",
-        dest: "docs/jsdoc/md/singlefile_doc_markdown_for_<%= pkg.name %>.md"
+        src: [
+          '<%= p.modelsSrcDir %>/**/*.js',
+          '<%= p.routesSrcDir %>/**/*.js',
+          '<%= p.viewsSrcDir %>/**/*.js'
+        ],
+        dest: "<%= p.buildDir %>/docs/jsdoc/md/singlefile_doc_markdown_for_<%= p.pkg.name %>.md"
       },
       compileSeperateFiles: {
         files: [
-          {src: "models/channel-type.js", dest: "docs/jsdoc/md/channel-type.md"}
+          {
+            src: "<%= p.modelsSrcDir %>/channel-type.js", 
+            dest: "<%= p.buildDir %>/docs/jsdoc/md/channel-type.md"
+          }
         ]
       }
-        // withOptions: {
-        //     options: {
-        //         index: true
-        //     },
-        //     src: "models/wardrobe.js",
-        //     dest: "doc/with-index.md"
-        // }
+      // withOptions: {
+      //     options: {
+      //         index: true
+      //     },
+      //     src: "models/wardrobe.js",
+      //     dest: "doc/with-index.md"
+      // }
     },
 
     // Generate yuidoc via grunt-contrib-yuidoc
     yuidoc: {
       compile: {
-        name: '<%= pkg.name %>',
-        description: '<%= pkg.description %>',
-        version: '<%= pkg.version %>',
-        url: '<%= pkg.homepage %>',
+        name: '<%= p.pkg.name %>',
+        description: '<%= p.pkg.description %>',
+        version: '<%= p.pkg.version %>',
+        url: '<%= p.pkg.homepage %>',
         // Options mirror cli flags http://yui.github.io/yuidoc/args/index.html
         options: {
-          paths: 'models',
-          outdir: 'docs/yuidoc',
+          paths: [
+            '<%= p.modelsSrcDir %>',
+            '<%= p.routesSrcDir %>',
+            '<%= p.viewsSrcDir %>'
+          ],
+          outdir: '<%= p.buildDir %>/docs/yuidoc',
           exclude: "lib,docs,build",
           themedir: "node_modules/yuidoc-bootstrap-theme",
           helpers: ["node_modules/yuidoc-bootstrap-theme/helpers/helpers.js"]
@@ -431,8 +544,8 @@ module.exports = function (grunt) {
       },
 
       // Remove and rebuild the docs repository
-      docs_destroy: {
-        cmd: 'rm -rf docs'
+      docsDestroy: {
+        cmd: 'rm -rf <%= p.buildDir %>/docs'
       }
       // docs_init: {
       //   cmd: 'git clone repo@myHost.ing:user/project-docs.git docs'
@@ -453,6 +566,11 @@ module.exports = function (grunt) {
 
   });
 
+
+  // Load grunt tasks from package.json
+  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+
+
   // Define tasks -----------------------
 
   // Collect git info to determine a version tag
@@ -464,10 +582,10 @@ module.exports = function (grunt) {
   });
 
   // Save the git info to version.json
-  grunt.registerTask('tag-revision', 'Tag the current build revision', function () {
+  grunt.registerTask('tagRevision', 'Tag the current build revision', function () {
     grunt.task.requires('git-describe');
     // Make sure our package details are current
-    var p = grunt.file.readJSON('package.json')
+    var p = grunt.file.readJSON('package.json');
     grunt.file.write('public/version.json', JSON.stringify({
       build: p.build,
       version: grunt.config('pkg.version'),
@@ -476,13 +594,20 @@ module.exports = function (grunt) {
     }));
   });
 
-  // Generate/update a public/version.json
-  grunt.registerTask('version', ['saveRevision', 'tag-revision']);
+  // Update public/version.json
+  grunt.registerTask('version', ['saveRevision', 'tagRevision']);
+  
+  // Rebuild the changelog
+  grunt.registerTask('changelog', ['git_changelog']);  
+
+  // Rebuild the readme
+  grunt.registerTask('readme', ['verb:readme']);  
 
   // Bumps the build number and updates the version file
   grunt.registerTask('build', [
     'buildnumber',   // Increment the build numbers
-    'version'        // Generate the version.json
+    'version',       // Generate the version.json
+    'readme'         // Rebuild the readme
   ]); 
 
   // Check or enforce coding standards
@@ -508,7 +633,7 @@ module.exports = function (grunt) {
   ]);
 
   // Tasks for generating docs
-  grunt.registerTask("doc", ['exec:docs_destroy', 'docco', 'jsdocs', 'yuidocs']);
+  grunt.registerTask("doc", ['exec:docsDestroy', 'docco', 'jsdocs', 'yuidocs', 'verb']);
   grunt.registerTask("jsdocs", ['jsdoc', 'jsdoc2md']);
   grunt.registerTask('yuidocs', ['yuidoc:compile']);
   //grunt.registerTask('docs', ['exec:docs_branchCheck', 'yuidoc:compile', 'exec:docs_publish']);

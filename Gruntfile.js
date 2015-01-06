@@ -98,15 +98,15 @@ module.exports = function (grunt) {
     githubAccount: "jwtd",
     root: root,
     //gruntConfigDir: "<%= p.root %>/grunt-base/config",
-    srcDir: root + "src",
-      modelsSrcDir: root + "/src/models",
-      routesSrcDir: root + "/src/routes",
-      viewsSrcDir: root + "/src/views",
-      docsSrcDir: root + "/src/docs",
-    testsDir: root + "/tests",
-    toolsDir: root + "/tools",
-    dataDir: root + "/data",
-    buildDir: root + "/build"
+    srcDir: "src",
+      modelsSrcDir: "src/models",
+      routesSrcDir: "src/routes",
+      viewsSrcDir:  "src/views",
+      docsSrcDir:   "src/docs",
+    testsDir: "tests",
+    toolsDir: "tools",
+    dataDir:  "data",
+    buildDir: "build"
     //sassDir: "<%= p.root %>/sass",
     //cssDir: "<%= p.root %>/css",
     //jsDir: "<%= p.root %>/js"
@@ -154,38 +154,28 @@ module.exports = function (grunt) {
 
     // Generate README.md using verb
     verb: {
-      cwd: "src/docs/verb",
-      docs: "src/docs/verb",
+      docs: "<%= p.docsSrcDir %>/verb",
       data: [
          "<%= p.root %>/package.json",
          "<%= p.docsSrcDir %>/verb/*.{json,yml}"
       ],
-      changelog: {
-        files:[ 
-          { 
-            src:  "changelog.tmpl.md", 
-            dest: "changelog.md"
-          }
-        ]
-      },
       readme: {
-        // Where the template files are store
         files:[ 
-          { 
-            src:  "src/docs/verb/README.tmpl.md", 
-            dest: "README.md"
-          }//,
-             // { 
-             //   src:  "<%= p.docsSrcDir %>/verb/README.tmpl.md", 
-             //   dest: "<%= p.root %>/README.md"
-             // },
           // {
           //   expand: true, 
           //   cwd: '<%= p.docsSrcDir %>/verb', 
-          //   src: ['**/*.tmpl.md'], 
+          //   src: ['<%= p.docsSrcDir %>/verb/**/*.src.md'], 
           //   dest: '.', 
           //   ext: '.md'
           // },
+          { 
+            src:  "<%= p.docsSrcDir %>/verb/authors.src.md", 
+            dest: "<%= p.docsSrcDir %>/verb/authors.md"
+          },
+          { 
+            src:  "<%= p.docsSrcDir %>/verb/README.src.md", 
+            dest: "README.md"
+          }
         ]
       }
     },

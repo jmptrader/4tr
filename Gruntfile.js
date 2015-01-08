@@ -623,7 +623,7 @@ module.exports = function (grunt) {
   ]);
 
   // Tasks for generating docs
-  grunt.registerTask("doc", ['exec:docsDestroy', 'docco', 'jsdocs', 'yuidocs', 'verb']);
+  grunt.registerTask("doc", ['exec:docsDestroy', 'docco', 'jsdocs', 'yuidocs', 'verb:readme']);
   grunt.registerTask("jsdocs", ['jsdoc', 'jsdoc2md']);
   grunt.registerTask('yuidocs', ['yuidoc:compile']);
   //grunt.registerTask('docs', ['exec:docs_branchCheck', 'yuidoc:compile', 'exec:docs_publish']);

@@ -22,14 +22,14 @@ node_modules
 lib-cov
 
 # Ignore the data directory for now
-data
+/data
 
 # Coverage directory used by tools like istanbul
 coverage
 
 # Ignore doc and build related directories
-docs
-build
+/docs
+/build
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release

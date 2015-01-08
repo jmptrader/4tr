@@ -28,7 +28,7 @@ describe("ChannelType", function() {
     });
  
     it("should set ChannelType's name, units, and type if provided", function() {
-      var ct = new ChannelType('Temperature', 'F', 'I');
+      var ct = new ChannelType('I', 'Temperature', 'F');
       expect(ct.name).to.equal('Temperature');
       expect(ct.units).to.equal('F');
       expect(ct.type).to.equal('I');
@@ -41,7 +41,7 @@ describe("ChannelType", function() {
   describe("#identity", function() {
 
     it("should return a human readable string that conveys its identity", function() {
-      var ct = new ChannelType('Temperature', 'F', 'I');
+      var ct = new ChannelType('I', 'Temperature', 'F');
       expect(ct.identity()).to.equal('I: Temperature in F');
     });
     

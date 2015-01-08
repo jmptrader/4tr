@@ -3,7 +3,7 @@
 // Note: This is also set in chai-helper.js, but JShint complains if its not here too
 var chai = require('chai');
 var expect = chai.expect;
-var superagent = require('superagent')
+var superagent = require('superagent');
 
 // Get the require helper that allows test coverage analysis
 var requireHelper = require('../helpers/require-helper');
@@ -14,8 +14,9 @@ describe('express rest api server', function(){
 
   it('post object', function(done){
     superagent.post('http://localhost:3000/collections/test')
-      .send({ name: 'John'
-        , email: 'john@rpjs.co'
+      .send({ 
+        name: 'John', 
+        email: 'john@rpjs.co'
       })
       .end(function(e,res){
         // console.log(res.body)
@@ -36,8 +37,8 @@ describe('express rest api server', function(){
         expect(res.body._id.length).to.eql(24);
         expect(res.body._id).to.eql(id);
         done();
-      })
-  })
+      });
+  });
 
   it('retrieves a collection', function(done){
     superagent.get('http://localhost:3000/collections/test')
@@ -45,15 +46,17 @@ describe('express rest api server', function(){
         // console.log(res.body)
         expect(e).to.eql(null);
         expect(res.body.length).to.be.above(0);
-        expect(res.body.map(function (item){return item._id})).to.contain(id);
+        expect(res.body.map(function (item){return item._id;})).to.contain(id);
         done();
       });
   });
 
   it('updates an object', function(done){
     superagent.put('http://localhost:3000/collections/test/'+id)
-      .send({name: 'Peter'
-        , email: 'peter@yahoo.com'})
+      .send({
+        name: 'Peter', 
+        email: 'peter@yahoo.com'
+      })
       .end(function(e, res){
         // console.log(res.body)
         expect(e).to.eql(null);

@@ -125,11 +125,11 @@ module.exports = function (grunt) {
      *        Release Automation      *
      *--------------------------------*/
 
-    git_changelog: {
-      cwd: 'changes',
-      manifest: "<%= p.root %>/package.json",
-      history: "<%= p.buildDir %>/docs/history.txt",
-      changelog: "<%= p.buildDir %>/docs/changelog.txt",
+    git_changelog: {  // jshint ignore:line
+      cwd: '<%= p.buildDir %>',
+      manifest: "package.json",
+      history: "docs/history.txt",
+      changelog: "docs/changelog.txt",
       changesSeparator: '\n\t*********',
       masks: [
         {

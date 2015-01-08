@@ -199,10 +199,10 @@ module.exports = function (grunt) {
         npm: false,             //default: true
         //folder: 'folder/to/publish/to/npm', //default project root
         //tagName: 'some-tag-<%= p.version %>', //default: '<%= p.version %>'
-        commitMessage: 'Release <%= p.pkg.name %> v<%= p.version %>', //default: 'release <%= p.version %>'
+        commitMessage: 'Release <%= pkg.name %> v<%= p.version %>', //default: 'release <%= p.version %>'
         //tagMessage: 'tagging version <%= p.version %>', //default: 'Version <%= p.version %>',
         github: {
-          repo: "<%= p.githubAccount %>/<%= p.pkg.name %>",   // Github repo here
+          repo: "<%= p.githubAccount %>/<%= pkg.name %>",   // Github repo here
           usernameVar: 'GITHUB_USERNAME', //ENVIRONMENT VARIABLE that contains Github username
           passwordVar: 'GITHUB_PASSWORD'  //ENVIRONMENT VARIABLE that contains Github password
         }
@@ -485,7 +485,7 @@ module.exports = function (grunt) {
           '<%= p.routesSrcDir %>/**/*.js',
           '<%= p.viewsSrcDir %>/**/*.js'
         ],
-        dest: "<%= p.buildDir %>/docs/jsdoc/md/singlefile_doc_markdown_for_<%= p.pkg.name %>.md"
+        dest: "<%= p.buildDir %>/docs/jsdoc/md/singlefile_doc_markdown_for_<%= pkg.name %>.md"
       },
       compileSeperateFiles: {
         files: [
@@ -507,10 +507,10 @@ module.exports = function (grunt) {
     // Generate yuidoc via grunt-contrib-yuidoc
     yuidoc: {
       compile: {
-        name: '<%= p.pkg.name %>',
-        description: '<%= p.pkg.description %>',
-        version: '<%= p.pkg.version %>',
-        url: '<%= p.pkg.homepage %>',
+        name: '<%= pkg.name %>',
+        description: '<%= pkg.description %>',
+        version: '<%= pkg.version %>',
+        url: '<%= pkg.homepage %>',
         // Options mirror cli flags http://yui.github.io/yuidoc/args/index.html
         options: {
           paths: [

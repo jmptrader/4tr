@@ -11,7 +11,7 @@
 {%= copyright() %}
 {%= license() %}
 
-{%= docs("changelog") %}
+{%= docs("git-changelog") %}
 
 ***
 

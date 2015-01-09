@@ -126,10 +126,10 @@ module.exports = function (grunt) {
      *--------------------------------*/
 
     git_changelog: {  // jshint ignore:line
-      cwd: '<%= p.buildDir %>',
+      //cwd: '<%= p.buildDir %>',
       manifest: "package.json",
-      history: "docs/history.txt",
-      changelog: "docs/changelog.txt",
+      history: "<%= p.docsSrcDir %>/history.txt",
+      changelog: "<%= p.docsSrcDir %>/verb/git-changelog.md",
       changesSeparator: '\n\t*********',
       masks: [
         {

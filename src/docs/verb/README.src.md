@@ -11,6 +11,8 @@
 {%= copyright() %}
 {%= license() %}
 
+{%= docs("changelog") %}
+
 ***
 
 {%= include("footer") %}

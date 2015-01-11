@@ -306,6 +306,20 @@ module.exports = function (grunt) {
           ]
         },
         src: ['<%= p.testsDir %>/integration/**/*.spec.js']
+      },
+
+      // functional tests = Tests the interface between systems
+      functional: {
+        options: {
+          ui: 'bdd',
+          reporter: 'spec',
+          require: [
+            '<%= p.testsDir %>/helpers/chai-helper', 
+            '<%= p.testsDir %>/helpers/require-helper', 
+            '<%= p.testsDir %>/helpers/utils-helper'
+          ]
+        },
+        src: ['<%= p.testsDir %>/functional/**/*.spec.js']
       } 
 
     },
@@ -608,6 +622,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test', ['mochaTest:unit', 'mochaTest:integration']);  
   grunt.registerTask('unit', ['mochaTest:unit']);  
   grunt.registerTask('integration', ['mochaTest:integration']);  
+  grunt.registerTask('functional', ['mochaTest:functional']);  
 
   // Code coverage task
   grunt.registerTask('cover', [

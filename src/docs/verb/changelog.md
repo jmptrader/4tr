@@ -2,8 +2,8 @@
 
 > Changelog using default 'CHANGELOG' file. See 'examples/changelog.js'
 
-{%= changelog() %}
 
 > Changelog using custom data source
 
-{%= changelog({data: 'changelog.json'}) %}
+{%= changelog('changelog.yaml') %}
+

@@ -122,6 +122,15 @@ module.exports = function (grunt) {
     p: p,
    
     /*--------------------------------*
+     *        Build Preparation       *
+     *--------------------------------*/
+
+    clean: {
+      build: ["build"],
+      release: ["release"]
+    },
+
+    /*--------------------------------*
      *        Release Automation      *
      *--------------------------------*/
 
@@ -619,7 +628,7 @@ module.exports = function (grunt) {
   grunt.registerTask('verify', ['jsbeautifier:verify', 'jshint']);
 
   // Testing tasks
-  grunt.registerTask('test', ['mochaTest:unit', 'mochaTest:integration']);  
+  grunt.registerTask('test', ['mochaTest:unit', 'mochaTest:integration', 'mochaTest:functional']);  
   grunt.registerTask('unit', ['mochaTest:unit']);  
   grunt.registerTask('integration', ['mochaTest:integration']);  
   grunt.registerTask('functional', ['mochaTest:functional']);  

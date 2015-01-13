@@ -7,6 +7,7 @@ var superagent = require('superagent');
 
 // Get the require helper that allows test coverage analysis
 var requireHelper = require('../helpers/require-helper');
+var util = require('util');
 
 describe('express rest api server', function(){
   var id;
@@ -18,7 +19,7 @@ describe('express rest api server', function(){
         email: 'john@rpjs.co'
       })
       .end(function(e,res){
-        // console.log(res.body)
+        //console.log(res.body)
         expect(e).to.eql(null);
         expect(res.body.length).to.eql(1);
         expect(res.body[0]._id.length).to.eql(24);
@@ -32,7 +33,6 @@ describe('express rest api server', function(){
       .end(function(e, res){
         expect(e).to.eql(null);
         expect(typeof res.body).to.eql('object');
-      console.log('res.body._id ' + res.body._id);
         expect(res.body._id.length).to.eql(24);
         expect(res.body._id).to.eql(id);
         done();
@@ -42,7 +42,7 @@ describe('express rest api server', function(){
   it('retrieves a collection', function(done){
     superagent.get('http://localhost:3000/api/collections/test')
       .end(function(e, res){
-        // console.log(res.body)
+        //console.log(res.body)
         expect(e).to.eql(null);
         expect(res.body.length).to.be.above(0);
         expect(res.body.map(function (item){return item._id;})).to.contain(id);

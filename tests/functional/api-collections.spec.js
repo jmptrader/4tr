@@ -8,12 +8,11 @@ var superagent = require('superagent');
 // Get the require helper that allows test coverage analysis
 var requireHelper = require('../helpers/require-helper');
 
-
 describe('express rest api server', function(){
   var id;
 
   it('post object', function(done){
-    superagent.post('http://localhost:3000/collections/test')
+    superagent.post('http://localhost:3000/api/collections/test')
       .send({ 
         name: 'John', 
         email: 'john@rpjs.co'
@@ -29,11 +28,11 @@ describe('express rest api server', function(){
   });
 
   it('retrieves an object', function(done){
-    superagent.get('http://localhost:3000/collections/test/'+id)
+    superagent.get('http://localhost:3000/api/collections/test/' + id)
       .end(function(e, res){
-        // console.log(res.body)
         expect(e).to.eql(null);
         expect(typeof res.body).to.eql('object');
+      console.log('res.body._id ' + res.body._id);
         expect(res.body._id.length).to.eql(24);
         expect(res.body._id).to.eql(id);
         done();
@@ -41,7 +40,7 @@ describe('express rest api server', function(){
   });
 
   it('retrieves a collection', function(done){
-    superagent.get('http://localhost:3000/collections/test')
+    superagent.get('http://localhost:3000/api/collections/test')
       .end(function(e, res){
         // console.log(res.body)
         expect(e).to.eql(null);
@@ -52,7 +51,7 @@ describe('express rest api server', function(){
   });
 
   it('updates an object', function(done){
-    superagent.put('http://localhost:3000/collections/test/'+id)
+    superagent.put('http://localhost:3000/api/collections/test/' + id)
       .send({
         name: 'Peter', 
         email: 'peter@yahoo.com'
@@ -67,7 +66,7 @@ describe('express rest api server', function(){
   });
 
   it('checks an updated object', function(done){
-    superagent.get('http://localhost:3000/collections/test/'+id)
+    superagent.get('http://localhost:3000/api/collections/test/'+id)
       .end(function(e, res){
         // console.log(res.body)
         expect(e).to.eql(null);
@@ -80,7 +79,7 @@ describe('express rest api server', function(){
   });
   
   it('removes an object', function(done){
-    superagent.del('http://localhost:3000/collections/test/'+id)
+    superagent.del('http://localhost:3000/api/collections/test/'+id)
       .end(function(e, res){
         // console.log(res.body)
         expect(e).to.eql(null);

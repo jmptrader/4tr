@@ -34,7 +34,7 @@ router.get('/status', function(req, res) {
 // Look for and extract the collectionName parameter
 router.param('collectionName', function(req, res, next, collectionName){
   // Retrieve the collection, save it on the request, then next
-  req.collection = db.collection(collectionName);
+  req.collection = req.db.collection(collectionName);
   return next();
 });
 

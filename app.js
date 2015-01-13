@@ -7,21 +7,21 @@ var bodyParser = require('body-parser');
 var mongo = require('mongoskin');
 
 // Setup www pages
-var routes = require('./routes/index');
+var routes = require('./src/routes/index');
 
 // Setup APIs endpoints
 //var users = require('./routes/users');
-var apiCollections = require('./routes/api-collections');
+var apiCollections = require('./src/routes/api-collections');
 
 // Initialize the Express app
 var app = express();
 
 // Setup the view engine
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'jade');
 
 // Favicon
-app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(favicon(__dirname + '/src/public/favicon.ico'));
 
 // Logger
 app.use(logger('dev'));

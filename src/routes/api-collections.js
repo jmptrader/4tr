@@ -19,16 +19,12 @@ router.use(function(req, res, next) {
 
 // Health status endpoint at base of API and at /api/status
 var status = { 
-	  message: 'ok', 
-	  name: module.exports.name, 
-	  mode: app.settings.env, 
-	  version: module.exports.version,
-	  build: module.exports.build
+	    message: 'ok', 
+	    name: module.exports.name, 
+	    mode: app.settings.env, 
+	    version: module.exports.version,
+	    build: module.exports.build
     };
-
-router.get('/', function(req, res) {
-    res.json(status); 
-});
 router.get('/status', function(req, res) {
     res.json(status);
 });

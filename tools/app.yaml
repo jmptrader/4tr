@@ -1,0 +1,26 @@
+defaults: &defaults
+  port: 3000
+  cache_assets: true
+  secret_key: 7EHDWHD9W9UW9FBFB949394BWYFG8WE78F
+
+development: &development
+  <<: *defaults
+  cache_assets: false
+
+test:
+  <<: *defaults
+  port: 3001
+
+staging: &staging
+  <<: *defaults
+
+production: &production
+  <<: *defaults
+  port: #{process.env.PORT}
+  secret_key: 3F8RRJR30UHERGUH8UERHGIUERHG3987GH8
+
+background_process_development:
+  <<: *development
+
+background_process_staging:
+  <<: *staging

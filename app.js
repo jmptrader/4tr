@@ -6,7 +6,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongo = require('mongoskin');
 
-// Setup www pages
+// Setup different environments: development, test, production
+var env = process.env.NODE_ENV || 'development';
+//var config = require('./config/config')[env];
+var config = require('konfig')({ path: './tools' });
+
+// Setup handlers and components 
+//var models = require('./app/models');
+//var middleware = require('./app/middleware');
 var routes = require('./src/routes/index');
 
 // Setup APIs endpoints
@@ -15,6 +22,9 @@ var apiCollections = require('./src/routes/api-collections');
 
 // Initialize the Express app
 var app = express();
+
+// Tell it what port to listen on
+app.set('port', process.env.PORT || config.app.port || 3000);
 
 // Setup the view engine
 app.set('views', path.join(__dirname, 'src/views'));
@@ -35,11 +45,20 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Mongo datastore setup
+// database
+//mongoose.connect(config.app.db);
 // For remote URIs:   mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]
 var db = mongo.db('mongodb://@localhost:27017/test', {safe:true});
 // var server = mongo.Server;
 // var mongoClient = mongo.MongoClient;
 // var replSetServers = mongo.ReplSetServers;
+
+// Middleware
+//middleware(app);
+
+// Application routes
+//routes(app);
+
 
 // Make datastore accessible to our router
 app.use(function(req,res,next){
@@ -84,4 +103,9 @@ app.use(function(err, req, res, next) {
 });
 
 
-module.exports = app;
+// Startup the server
+app.listen(app.get('port'));
+console.log('Express server listening on port ' + app.get('port'));
+
+// export app so we can test it
+exports = module.exports = app;

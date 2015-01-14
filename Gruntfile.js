@@ -179,6 +179,7 @@ module.exports = function (grunt) {
     mochaTest: {
 
       // Runs a single test
+      // Matches any spec name in the tests directory
       // Format for calling is     grunt spec:mochaTest:api-collections
       spec: {
         src: 'src/**/*.js',
@@ -247,17 +248,16 @@ module.exports = function (grunt) {
     copy: {
       application: {
         expand: true,
-        flatten: true,
-        src: ['<%= gc.modelsSrcDir %>/*'],
-        dest: '<%= gc.testsDir %>/coverage/instrument/models'
+        flatten: false,
+        src: ['<%= gc.srcDir %>/**'],
+        dest: '<%= gc.testsDir %>/coverage/instrument/'
       }
     },
 
     // Add coverage instrumentation to the copies of the app files
     instrument: {
       files: [
-        '<%= gc.modelsSrcDir %>/*.js',
-        '<%= gc.routesSrcDir %>/*.js'
+        'src/**/*.js'
       ],
       options: {
         lazy: false,
@@ -268,7 +268,7 @@ module.exports = function (grunt) {
     // Point the test runner at the dir with the instrumentated app files
     env: {
       coverage: {
-        APP_DIR_FOR_CODE_COVERAGE: '<%= gc.testsDir %>/coverage/instrument/models'
+        APP_DIR_FOR_CODE_COVERAGE: '../../<%= gc.testsDir %>/coverage/instrument/src/'
       }
     },
 

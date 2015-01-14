@@ -11,7 +11,7 @@ var expect = chai.expect;
 var requireHelper = require('../helpers/require-helper');
 
 // Bring in the object we're going to test
-var ChannelType = requireHelper('channel-type');
+var ChannelType = requireHelper('models/channel-type');
 
 
 describe("ChannelType", function() {

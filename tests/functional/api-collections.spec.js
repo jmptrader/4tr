@@ -1,5 +1,4 @@
-
-// Setup superagent and chai expect 
+// Setup superagent and chai expect
 // Note: This is also set in chai-helper.js, but JShint complains if its not here too
 var chai = require('chai');
 var expect = chai.expect;
@@ -14,8 +13,8 @@ describe('server', function () {
 
     it('post object', function(done){
       superagent.post('http://localhost:3000/api/collections/test')
-        .send({ 
-          name: 'John', 
+        .send({
+          name: 'John',
           email: 'john@rpjs.co'
         })
         .end(function(e,res){
@@ -45,7 +44,9 @@ describe('server', function () {
           //console.log(res.body)
           expect(e).to.eql(null);
           expect(res.body.length).to.be.above(0);
-          expect(res.body.map(function (item){return item._id;})).to.contain(id);
+          expect(res.body.map(function (item){
+            return item._id;
+          })).to.contain(id);
           done();
         });
     });
@@ -53,7 +54,7 @@ describe('server', function () {
     it('updates an object', function(done){
       superagent.put('http://localhost:3000/api/collections/test/' + id)
         .send({
-          name: 'Peter', 
+          name: 'Peter',
           email: 'peter@yahoo.com'
         })
         .end(function(e, res){
@@ -77,7 +78,7 @@ describe('server', function () {
           done();
         });
     });
-    
+
     it('removes an object', function(done){
       superagent.del('http://localhost:3000/api/collections/test/'+id)
         .end(function(e, res){

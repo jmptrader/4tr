@@ -4,7 +4,7 @@
  * @param String path
  *    Any valid require path
  *
- * @return String path 
+ * @return String path
  *    The path to the correct environment
  *
  * Using requireHelper in a test

@@ -57,6 +57,7 @@
     "grunt-jsdoc-to-markdown": "^0.4.2",
     "grunt-mocha-test": "^0.12.4",
     "grunt-release": "^0.9.0",
+    "grunt-sonar-runner": "^2.4.1",
     "grunt-verb": "^0.2.4",
     "ink-docstrap": "^0.4.12",
     "mocha": "*",

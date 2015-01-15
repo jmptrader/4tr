@@ -303,6 +303,41 @@ module.exports = function (grunt) {
       }
     },
 
+    // SonarQube test runner
+    // sonar.projectKey=4tr
+    // sonar.projectName=4tr
+    // sonar.projectVersion=0.0.1
+    // sonar.sources=src
+    // sonar.tests=tests
+    // sonar.language=js
+    // sonar.dynamicAnalysis=reuseReports
+    // sonar.javascript.lcov.reportPath=tests/coverage/reports/lcov.info
+    sonarRunner: {
+      analysis: {
+        options: {
+          debug: true,
+          separator: '\n',
+          sonar: {
+            host: {
+              url: 'http://localhost:9000'
+            },
+            jdbc: {
+              url: 'jdbc:mysql://localhost:3306/sonar',
+              username: 'sonar',
+              password: 'sonar'
+            },
+            projectKey: 'sonar:grunt-sonar-runner:4tr:0.1.0',
+            projectName: '4tr',
+            projectVersion: '0.0.1',
+            sources: ['tests'].join(','),
+            language: 'js',
+            sourceEncoding: 'UTF-8',
+            exclusions: ['tests/coverage/**']
+          }
+        }
+      }
+    },
+
 
     /*--------------------------------*
      *    Code Monitoring Triggers    *

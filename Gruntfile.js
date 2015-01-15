@@ -232,14 +232,20 @@ module.exports = function (grunt) {
 
     },
 
+    // Benchmarks the API - https://github.com/matteofigus/grunt-api-benchmark
+    // Tune your machine to remove any OS limits on opening and quickly recycling sockets
+    // sudo sysctl -w kern.maxfiles=25000
+    // sudo sysctl -w kern.maxfilesperproc=24500
+    // sudo sysctl -w kern.ipc.somaxconn=20000
+    // ulimit -S -n 20000
     api_benchmark: {
-      myApi: {
+      restApi: {
         options: {
           output: '<%= gc.testsDir %>/benchmarks/'
         },
         files: {
-          'report.html': 'config.json',
-          'export.json': 'config.json'
+          'api-benchmark.html': 'api-benchmark.json',
+          'api-benchmark.json': 'api-benchmark.json'
         }
       }
     },

@@ -1,17 +1,17 @@
 {
   "service": {
-    "REST api": "http://localhost:3007"
+    "REST api": "http://localhost:3000/api/"
   },
   "endpoints": {
-    "simpleRoute": "/api/collections/test", 
+    "simpleRoute": "collections/test", 
     "secondaryRoute": {
-      "route": "//api/collections/test",
+      "route": "collections/test",
       "headers": {
         "something": "value"
       }
     },
     "postRoute": {
-      "route": "/api/collections/test",
+      "route": "collections/test",
       "method": "post",
       "data": {
         "test": true,
@@ -22,7 +22,7 @@
       }
     },
     "deleteRoute": {
-      "route": "/api/collections/test?test=true",
+      "route": "collections/test?test=true",
       "method": "delete",
       "maxMean": 0.06,
       "maxSingleMean": 0.003

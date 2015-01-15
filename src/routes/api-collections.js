@@ -14,7 +14,7 @@ router.use(function(req, res, next) {
     // Authentication & logging
     console.log('API request start');
     // Always or middleware becomes endware :D
-    next(); 
+    next();
 });
 
 // Health status endpoint at base of API and at /api/status

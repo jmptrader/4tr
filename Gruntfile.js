@@ -232,6 +232,18 @@ module.exports = function (grunt) {
 
     },
 
+    api_benchmark: {
+      myApi: {
+        options: {
+          output: '<%= gc.testsDir %>/benchmarks/'
+        },
+        files: {
+          'report.html': 'config.json',
+          'export.json': 'config.json'
+        }
+      }
+    },
+
 
     /*--------------------------------*
      *         Code Coverage          *
@@ -329,10 +341,10 @@ module.exports = function (grunt) {
             projectKey: 'sonar:grunt-sonar-runner:4tr:0.1.0',
             projectName: '4tr',
             projectVersion: '0.0.1',
-            sources: ['tests'].join(','),
+            sources: ['<%= gc.testsDir %>'].join(','),
             language: 'js',
             sourceEncoding: 'UTF-8',
-            exclusions: ['tests/coverage/**']
+            exclusions: ['<%= gc.testsDir %>/coverage/**']
           }
         }
       }

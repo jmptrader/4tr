@@ -103,11 +103,9 @@ app.use(function(err, req, res, next) {
     });
 });
 
-console.log('About to listen on port for ' + env);
+
 // Startup the server
-//if (env == 'test' || process.env.NODE_ENV == 'test'){
 app.listen(app.get('port'));
-//}
 console.log('Express server listening on port ' + app.get('port'));
 
 // export app so we can test it

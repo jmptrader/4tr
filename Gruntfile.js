@@ -232,20 +232,29 @@ module.exports = function (grunt) {
 
     },
 
-    // Benchmarks the API - https://github.com/matteofigus/grunt-api-benchmark
-    // Tune your machine to remove any OS limits on opening and quickly recycling sockets
-    // sudo sysctl -w kern.maxfiles=25000
-    // sudo sysctl -w kern.maxfilesperproc=24500
-    // sudo sysctl -w kern.ipc.somaxconn=20000
-    // ulimit -S -n 20000
+    /*
+    Benchmarks the API - https://github.com/matteofigus/grunt-api-benchmark
+    Config file is in 
+
+    Config options - https://github.com/matteofigus/api-benchmark#route-object
+
+    maxMean (Number, default null): if it is a number, generates an error when the mean value for a benchmark cycle is major than the expected value
+    maxSingleMean (Number, default null): if it is a number, generates an error when the mean across all the concurrent requests value is major than the expected value
+    
+    Tune your machine to remove any OS limits on opening and quickly recycling sockets
+    sudo sysctl -w kern.maxfiles=25000
+    sudo sysctl -w kern.maxfilesperproc=24500
+    sudo sysctl -w kern.ipc.somaxconn=20000
+    ulimit -S -n 20000
+    */
     api_benchmark: {
       restApi: {
         options: {
           output: '<%= gc.testsDir %>/benchmarks/'
         },
         files: {
-          'api-benchmark.html': 'api-benchmark.json',
-          'api-benchmark.json': 'api-benchmark.json'
+          'api-benchmark.json': '<%= gc.testsDir %>/acceptance/api-benchmark.json',
+          'api-benchmark.html': '<%= gc.testsDir %>/acceptance/api-benchmark.json'
         }
       }
     },
@@ -704,6 +713,10 @@ module.exports = function (grunt) {
   grunt.registerTask('unit', ['mochaTest:unit']);  
   grunt.registerTask('integration', ['mochaTest:integration']);  
   grunt.registerTask('functional', ['mochaTest:functional']);  
+
+  // Acceptance Testing Tasks
+  grunt.registerTask('acceptance', ['benchmark']);
+  grunt.registerTask('benchmark', ['api_benchmark:restApi']); 
 
   // Code coverage task
   grunt.registerTask('cover', [

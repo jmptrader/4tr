@@ -11,7 +11,7 @@ describe('server', function () {
   describe('rest api', function(){
     var id;
 
-    it('post object', function(done){
+    it('can add an object', function(done){
       superagent.post('http://localhost:3000/api/collections/test')
         .send({
           name: 'John',
@@ -27,7 +27,7 @@ describe('server', function () {
         });
     });
 
-    it('retrieves an object', function(done){
+    it('can retrieve a specific object', function(done){
       superagent.get('http://localhost:3000/api/collections/test/' + id)
         .end(function(e, res){
           expect(e).to.eql(null);
@@ -38,7 +38,7 @@ describe('server', function () {
         });
     });
 
-    it('retrieves a collection', function(done){
+    it('can retrieve a collection of objects', function(done){
       superagent.get('http://localhost:3000/api/collections/test')
         .end(function(e, res){
           //console.log(res.body)
@@ -51,7 +51,7 @@ describe('server', function () {
         });
     });
 
-    it('updates an object', function(done){
+    it('can updates an object', function(done){
       superagent.put('http://localhost:3000/api/collections/test/' + id)
         .send({
           name: 'Peter',
@@ -66,7 +66,7 @@ describe('server', function () {
         });
     });
 
-    it('checks an updated object', function(done){
+    it('can check an updated object', function(done){
       superagent.get('http://localhost:3000/api/collections/test/'+id)
         .end(function(e, res){
           // console.log(res.body)
@@ -79,7 +79,7 @@ describe('server', function () {
         });
     });
 
-    it('removes an object', function(done){
+    it('can remove an object', function(done){
       superagent.del('http://localhost:3000/api/collections/test/'+id)
         .end(function(e, res){
           // console.log(res.body)

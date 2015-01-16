@@ -3,30 +3,36 @@
     "REST api": "http://localhost:3000/api/"
   },
   "endpoints": {
+
     "simpleRoute": "collections/test", 
+
     "secondaryRoute": {
       "route": "collections/test",
       "headers": {
-        "something": "value"
+        "Content-Type": "application/json"
       }
     },
+
     "postRoute": {
       "route": "collections/test",
       "method": "post",
       "data": {
-        "test": true,
-        "someData": "someStrings"
+        "name": "John",
+        "email": "john@rpjs.co"
       },
       "headers": {
+      	"Content-Type": "application/json",
         "Accept-language": "*"
       }
     },
+
     "deleteRoute": {
-      "route": "collections/test?test=true",
+      "route": "collections/test/54b98f2451269c26ed223a2c",
       "method": "delete",
       "maxMean": 0.06,
       "maxSingleMean": 0.003
     }
+
   },
   "options": {
     "minSamples": 1000,

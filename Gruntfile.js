@@ -65,15 +65,14 @@ module.exports = function (grunt) {
       integration
       functional
       acceptance
-        health status for Reliability
-        benchmakr apis for Scalabilitiy
+        health status for reliability
+        benchmakr apis for scalabilitiy
         check usability
         check security
-        check push mechanisims for Maintainability
+        check push mechanisims for maintainability
         check configurability
         check compatibility against 3rd party APIs & clients
         check transferability
-      Deploy:Production
     deploy:production
   Production
     health checks
@@ -234,7 +233,8 @@ module.exports = function (grunt) {
 
     /*
     Benchmarks the API - https://github.com/matteofigus/grunt-api-benchmark
-    Config file is in 
+    
+    NOTE: https://github.com/matteofigus/grunt-api-benchmark/issues/3
 
     Config options - https://github.com/matteofigus/api-benchmark#route-object
 
@@ -253,8 +253,8 @@ module.exports = function (grunt) {
           output: '<%= gc.testsDir %>/benchmarks/'
         },
         files: {
-          'api-benchmark.json': '<%= gc.testsDir %>/acceptance/api-benchmark.json',
-          'api-benchmark.html': '<%= gc.testsDir %>/acceptance/api-benchmark.json'
+          'api-benchmark.html': '<%= gc.testsDir %>/acceptance/api-benchmark.json',
+          'api-benchmark.json': '<%= gc.testsDir %>/acceptance/api-benchmark.json'
         }
       }
     },
@@ -330,15 +330,18 @@ module.exports = function (grunt) {
       }
     },
 
-    // SonarQube test runner
-    // sonar.projectKey=4tr
-    // sonar.projectName=4tr
-    // sonar.projectVersion=0.0.1
-    // sonar.sources=src
-    // sonar.tests=tests
-    // sonar.language=js
-    // sonar.dynamicAnalysis=reuseReports
-    // sonar.javascript.lcov.reportPath=tests/coverage/reports/lcov.info
+    /*
+    sonarRunner - http://chapter31.com/2013/05/02/installing-sonar-source-on-mac-osx/
+    Out of memory errors
+    If sonar-runner is parsing a large codebase you might get an error like the following:
+    Caused by: java.util.concurrent.ExecutionException: java.lang.OutOfMemoryError: Java heap space
+    
+    Note: you can get more verbose output from the runner by adding the e flag:
+    sonar-runner -e
+
+    You can increase the Java heap size by running the following:
+    export SONAR_RUNNER_OPTS="-Xmx512m -XX:MaxPermSize=512m"
+    */
     sonarRunner: {
       analysis: {
         options: {

@@ -29,7 +29,7 @@
   ],
   "main": "index.js",
   "scripts": {
-    "build": "grunt",             
+    "build": "grunt",
     "test": "grunt test",
     "ci-test": "mocha -R TAP \"tests/**/*.spec.js\" > test.tap && istanbul report clover",
     "start": "node app.js",
@@ -60,6 +60,7 @@
     "grunt-mocha-test": "^0.12.4",
     "grunt-release": "^0.9.0",
     "grunt-sonar-runner": "^2.4.1",
+    "grunt-tape": "0.0.2",
     "grunt-verb": "^0.2.4",
     "ink-docstrap": "^0.4.12",
     "mocha": "*",

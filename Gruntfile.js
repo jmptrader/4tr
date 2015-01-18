@@ -79,28 +79,34 @@ module.exports = function (grunt) {
 
 */
 
+
+  // Time grunt task execution
+  require('time-grunt')(grunt);
+
+
+  /*-----------------------------------------------------*
+  *        Global properties for use in all tasks        *
+  *------------------------------------------------------*/
+
+
   // Prepare to calculate paths
   var path = require('path');
   var root = path.resolve();
 
-  // Lets time grunt execution
-  require('time-grunt')(grunt);
 
-  // Prepare a banner
-  var banner = '/*\n<%= pkg.name %> <%= pkg.version %>';
-      banner += '- <%= pkg.description %>\n<%= pkg.repository.url %>\n';
-      banner += 'Built on <%= grunt.template.today("yyyy-mm-dd") %>\n*/\n';
-
-  // Common paths for our tasks to use
-  
+  // Create global config (gc)
   var gc = {
     githubAccount: "jwtd",
+    // The following docServer properties will be used to run git clone <%= gs.docServer %>:<%= gs.docServerUser %>/<%= pkg.name %>-docs.git docs'
+    docServer: 'repo@myHost.ing',
+    docServerUser: 'no-user-specified',
     root: root,
     //gruntConfigDir: "<%= gc.root %>/grunt-base/config",
     srcDir: "src",
       modelsSrcDir: "src/models",
       routesSrcDir: "src/routes",
       viewsSrcDir:  "src/views",
+      publicSrcDir:  "src/public",
       docsSrcDir:   "src/docs",
     testsDir: "tests",
     toolsDir: "tools",
@@ -111,8 +117,10 @@ module.exports = function (grunt) {
     //jsDir: "<%= gc.root %>/js"
   };
 
+
   // Task configurations
   grunt.initConfig({
+
 
     // Pull in the package details
     pkg: grunt.file.readJSON('package.json'),
@@ -120,9 +128,11 @@ module.exports = function (grunt) {
     // Common paths for our tasks to use
     gc: gc,
 
+
     /*--------------------------------*
      *        Code Conventions        *
      *--------------------------------*/
+
 
     // Static code analysis and code style enforcement
     jshint: {
@@ -137,6 +147,7 @@ module.exports = function (grunt) {
         src: 'Gruntfile.js'
       }
     },
+
 
     // Code formatting : https://www.npmjs.com/package/grunt-jsbeautifier
     // Exclude files : ['!foo/bar.js'],
@@ -174,6 +185,7 @@ module.exports = function (grunt) {
     /*--------------------------------*
      *          Test suite            *
      *--------------------------------*/
+
 
     mochaTest: {
 
@@ -231,6 +243,7 @@ module.exports = function (grunt) {
 
     },
 
+
     /*
     Benchmarks the API - https://github.com/matteofigus/grunt-api-benchmark
     
@@ -260,16 +273,20 @@ module.exports = function (grunt) {
     },
 
 
+    // Generate tap/tape output from tests results
+    tape: {
+      options: {
+        pretty: true,
+        output: 'console'
+      },
+      files: ['<%= gc.testsDir %>/**/*.spec.js']
+    },
+
+
     /*--------------------------------*
      *         Code Coverage          *
      *--------------------------------*/
 
-    // Clean out old test coverage reports before each run
-    clean: {
-      coverage: {
-        src: ['<%= gc.testsDir %>/coverage/']
-      }
-    },
 
     // Copy all of the app files to a dir for coverage analysis 
     copy: {
@@ -280,6 +297,7 @@ module.exports = function (grunt) {
         dest: '<%= gc.testsDir %>/coverage/instrument/'
       }
     },
+
 
     // Add coverage instrumentation to the copies of the app files
     instrument: {
@@ -292,6 +310,7 @@ module.exports = function (grunt) {
       }
     },
 
+
     // Point the test runner at the dir with the instrumentated app files
     env: {
       coverage: {
@@ -299,12 +318,14 @@ module.exports = function (grunt) {
       }
     },
 
+
     // Save the raw coverage analysis data
     storeCoverage: {
       options: {
         dir: '<%= gc.testsDir %>/coverage/reports'
       }
     },
+
 
     // Generate a coverage report from the raw coverage analysis data
     makeReport: {
@@ -315,6 +336,7 @@ module.exports = function (grunt) {
         print: 'detail'
       }
     },
+
 
     // Enforce minimum thresholds of code coverage
     coverage: {
@@ -330,12 +352,12 @@ module.exports = function (grunt) {
       }
     },
 
+
     /*
     sonarRunner - http://chapter31.com/2013/05/02/installing-sonar-source-on-mac-osx/
     Out of memory errors
     If sonar-runner is parsing a large codebase you might get an error like the following:
     Caused by: java.util.concurrent.ExecutionException: java.lang.OutOfMemoryError: Java heap space
-    
     Note: you can get more verbose output from the runner by adding the e flag:
     sonar-runner -e
 
@@ -373,6 +395,29 @@ module.exports = function (grunt) {
      *    Code Monitoring Triggers    *
      *--------------------------------*/
     
+
+    // Run two or more grunt tasks at once in seperate processes
+    concurrent: {
+      target: {
+        tasks: ['nodemon', 'watch'],
+        options: {
+          logConcurrentOutput: true
+        }
+      }
+    },
+
+
+    // Restart npm server whenever watched files change
+    nodemon: {
+      dev: {
+        script: 'apgc.js',
+        options: {
+          ext: 'js,json'
+        }
+      }
+    },
+
+
     // Run tasks whenever watched files change
     watch: {
       clear: {
@@ -400,31 +445,6 @@ module.exports = function (grunt) {
       integration: {
         files: ['<%= gc.testsDir %>/integration/*.js'],
         tasks: ['jshint', 'integration']
-      }
-    },
-
-    // Restart npm server whenever watched files change
-    nodemon: {
-      dev: {
-        script: 'apgc.js',
-        options: {
-          ext: 'js,json'
-        }
-      }
-    },
-
-
-    /*--------------------------------*
-     *    Build Performance Helpers   *
-     *--------------------------------*/
-
-    // Run two or more grunt tasks at once in seperate processes
-    concurrent: {
-      target: {
-        tasks: ['nodemon', 'watch'],
-        options: {
-          logConcurrentOutput: true
-        }
       }
     },
 
@@ -489,6 +509,7 @@ module.exports = function (grunt) {
       }
     },
 
+
     // Generate docco doxs with 
     docco: {
       debug: {
@@ -501,6 +522,7 @@ module.exports = function (grunt) {
         }
       }
     },
+
 
     // Generate JSDocs with 
     jsdoc : {
@@ -518,6 +540,7 @@ module.exports = function (grunt) {
         }
       }
     },
+
 
     // Generate jsdoc markdown via grunt-jsdoc-to-markdown
     jsdoc2md: {
@@ -546,6 +569,7 @@ module.exports = function (grunt) {
       // }
     },
 
+
     // Generate yuidoc via grunt-contrib-yuidoc
     yuidoc: {
       compile: {
@@ -568,6 +592,7 @@ module.exports = function (grunt) {
       }
     },
 
+
     // Push new version of docs to doc server using git
     exec: {
       // Prevents running everything with grunt exec (that would be weird)
@@ -576,24 +601,26 @@ module.exports = function (grunt) {
       },
 
       // Remove and rebuild the docs repository
-      docsDestroy: {
+      cleanDocs: {
         cmd: 'rm -rf <%= gc.buildDir %>/docs'
+      },
+
+      // Clone this project's document repo to the doc server using SCP style git clone command
+      initDocs: {
+        cmd: 'git clone <%= gs.docServer %>:<%= gs.docServerUser %>/<%= pkg.name %>-docs.git docs'
+      },
+
+      // checks for a working repository, checks for material to commit, and then performs a simple commit and a push
+      publishDocs: {
+        // If we have initialized the docs directory, and if have something to commit, then commit it with the current message and then push
+        cmd: '[[ ! -d .git ]] && echo "docs directory not a repository - stopping..." || (git diff-index --quiet HEAD && echo "No changes to commit" || (git commit -a -m "Docs as of `date`" && git push))',
+        cwd: 'docs/'
+      },
+
+      // Verifies that we are on the branch that the docs should come from (master in this case)
+      docsBranchCheck: {
+        cmd: '[[ "$(git rev-parse --abbrev-ref HEAD)" == "master" ]] || exit 1'
       }
-      // docs_init: {
-      //   cmd: 'git clone repo@myHost.ing:user/project-docs.git docs'
-      // },
-
-      // // checks for a working repository, checks for material to commit, and then performs a simple commit and a push
-      // docs_publish: {
-      //   // If we have initialized the docs directory, and if have something to commit, then commit it with the current message and then push
-      //   cmd: '[[ ! -d .git ]] && echo "docs directory not a repository - stopping..." || (git diff-index --quiet HEAD && echo "No changes to commit" || (git commit -a -m "Docs as of `date`" && git push))',
-      //   cwd: 'docs/'
-      // },
-
-      // // Verifies that we are on the branch that the docs should come from (master in this case)
-      // docs_branchCheck: {
-      //   cmd: '[[ "$(git rev-parse --abbrev-ref HEAD)" == "master" ]] || exit 1'
-      // }
 
     },
 
@@ -602,14 +629,21 @@ module.exports = function (grunt) {
      *        Build Preparation       *
      *--------------------------------*/
 
+
+    // Clean out old test coverage reports before each run
     clean: {
+      coverage: {
+        src: ['<%= gc.testsDir %>/coverage/']
+      },
       build: ["build"],
       release: ["release"]
     },
 
+
     /*--------------------------------*
      *        Release Automation      *
      *--------------------------------*/
+
 
     // Release automation with https://github.com/geddski/grunt-release
     // grunt release
@@ -655,35 +689,61 @@ module.exports = function (grunt) {
 
   });
 
-  // Allows you to run a test on a single file
-  grunt.registerTask('spec', 'Runs a task on a specified file', function (taskName, fileName) {
-    gc.file = fileName;
-    grunt.log.writeln(gc.file);
-    grunt.log.writeln(taskName + ':spec');
-    grunt.task.run(taskName + ':spec');
-  });
+  /*------------------------------------------------*
+   *       Load grunt tasks from package.json       *
+   *------------------------------------------------*/
 
-
-  // Load grunt tasks from package.json
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
 
-  // Define tasks -----------------------
+  /*------------------------------------------------*
+   *        Check or enforce coding standards       *
+   *------------------------------------------------*/
+
+
+  grunt.registerTask('polish', ['jsbeautifier:modify', 'jshint']);
+  grunt.registerTask('verify', ['jsbeautifier:verify', 'jshint']);
+
+
+  /*------------------------------------------------*
+   *                  Build Tasks                   *
+   *------------------------------------------------*/
+
+
+  // grunt.registerTask('prod-release', 'Builds, tests, versions, tags, and publishes a new version of the project.', [
+  //   'clean:release',
+  //   'build',
+  //   'release'
+  // ]);
+
+
+  grunt.registerTask('build', 'Builds and updates build number and version file', [
+    'clean:build',
+    'buildnumber',   // Increment the build numbers
+    'version',       // Generate the version.json
+    'readme'         // Rebuild the readme
+  ]);
+
+
+  // Update public/version.json
+  grunt.registerTask('version', 'Collects the gitRevision', ['saveRevision', 'tagRevision']);
+  
 
   // Collect git info to determine a version tag
-  grunt.registerTask('saveRevision', function() {
+  grunt.registerTask('saveRevision', 'Creates git revision string in the format: tag-since-object dirty?"', function() {
     grunt.event.once('git-describe', function (rev) {
       grunt.option('gitRevision', rev);
     });
     grunt.task.run('git-describe');
   });
 
+
   // Save the git info to version.json
-  grunt.registerTask('tagRevision', 'Tag the current build revision', function () {
+  grunt.registerTask('tagRevision', 'Creates version.json with build #, pkg version, and git revision', function () {
     grunt.task.requires('git-describe');
     // Make sure our package details are current
     var p = grunt.file.readJSON('package.json');
-    grunt.file.write('public/version.json', JSON.stringify({
+    grunt.file.write('<%= gc.publicSrcDir %>/version.json', JSON.stringify({
       build: gc.build,
       version: grunt.config('pkg.version'),
       revision: grunt.option('gitRevision'),
@@ -691,60 +751,80 @@ module.exports = function (grunt) {
     }));
   });
 
-  // Update public/version.json
-  grunt.registerTask('version', ['saveRevision', 'tagRevision']);
-  
-  // Rebuild the changelog
-  grunt.registerTask('changelog', ['git_changelog']);  
 
-  // Rebuild the readme
-  grunt.registerTask('readme', ['verb:readme']);  
+  /*------------------------------------------------*
+   *                Testing Tasks                   *
+   *------------------------------------------------*/
 
-  // Bumps the build number and updates the version file
-  grunt.registerTask('build', [
-    'buildnumber',   // Increment the build numbers
-    'version',       // Generate the version.json
-    'readme'         // Rebuild the readme
-  ]); 
-
-  // Check or enforce coding standards
-  grunt.registerTask('polish', ['jsbeautifier:modify', 'jshint']);
-  grunt.registerTask('verify', ['jsbeautifier:verify', 'jshint']);
 
   // Testing tasks
-  grunt.registerTask('test', ['mochaTest:unit', 'mochaTest:integration', 'mochaTest:functional']);  
-  grunt.registerTask('unit', ['mochaTest:unit']);  
-  grunt.registerTask('integration', ['mochaTest:integration']);  
-  grunt.registerTask('functional', ['mochaTest:functional']);  
+  grunt.registerTask('ci-test', 'Continous integration test hook (outputs TAP results)', ['tape:ci']);
+  grunt.registerTask('test', 'Run all unit, integration, and functional tests', ['mochaTest:unit', 'mochaTest:integration', 'mochaTest:functional', 'tape:pretty']);  
+  grunt.registerTask('unit', 'Run unit tests only', ['mochaTest:unit']);  
+  grunt.registerTask('integration', 'Run integration tests only', ['mochaTest:integration']);  
+  grunt.registerTask('functional', 'Run functional tests only', ['mochaTest:functional']);  
+  
+
+  // Allows running of a single test file
+  grunt.registerTask('spec', 'Runs a specific test Grunt spec:api-collections ', function (taskName, fileName) {
+    gc.file = fileName;
+    //grunt.log.writeln(gc.file);
+    grunt.log.writeln(taskName + ':spec ' + gc.file);
+    grunt.task.run(taskName + ':spec');
+  });
+
 
   // Acceptance Testing Tasks
   grunt.registerTask('acceptance', ['benchmark']);
   grunt.registerTask('benchmark', ['api_benchmark:restApi']); 
 
-  // Code coverage task
-  grunt.registerTask('cover', [
-    'jshint', 
-    'clean', 
-    'copy:application', 
-    'env:coverage', 
-    'instrument', 
-    'test', 
-    'storeCoverage', 
-    'makeReport', 
-    'coverage'
-  ]);
 
-  // Tasks for generating docs
-  grunt.registerTask("doc", ['exec:docsDestroy', 'docco', 'jsdocs', 'yuidocs', 'verb:readme']);
-  grunt.registerTask("jsdocs", ['jsdoc', 'jsdoc2md']);
-  grunt.registerTask('yuidocs', ['yuidoc:compile']);
-  //grunt.registerTask('docs', ['exec:docs_branchCheck', 'yuidoc:compile', 'exec:docs_publish']);
-  //grunt.registerTask('docs_fix', ['exec:docs_destroy', 'exec:docs_init']);
+  // Code coverage task
+  grunt.registerTask('cover', ['clean:coverage', 'copy:application', 'env:coverage', 'instrument', 'test', 'storeCoverage', 'makeReport', 'coverage']);
+
 
   // Code monitoring - Watch for code changes and run tests or restart server as necessary
   grunt.registerTask('server', ['concurrent:target']);
 
-  // Default to syntax help and code monitoring
+
+  /*------------------------------------------------*
+   *        Generate project documentation          *
+   *------------------------------------------------*/
+
+
+  // Allows running of a single test file
+  grunt.registerTask('info', 'Displays project information to console', function () {
+    var banner = '/*\n<%= pkg.name %> <%= pkg.version %>';
+        banner += '- <%= pkg.description %>\n<%= pkg.repository.url %>\n';
+        banner += 'Built on <%= grunt.template.today("yyyy-mm-dd") %>\n*/\n';
+    grunt.log.writeln(banner);
+  });
+
+
+  // Generate api docs
+  grunt.registerTask("docs", 'Generate all project documentation', ['exec:docsDestroy', 'docco', 'jsdocs', 'yuidocs', 'verb:readme']);
+  grunt.registerTask("jsdocs", 'Generate jsdocs', ['jsdoc', 'jsdoc2md']);
+  grunt.registerTask('yuidocs', 'Generate yuidocs', ['yuidoc:compile']);
+
+
+  // Rebuild the readme
+  grunt.registerTask('readme', 'Rebuilds the project\'s readme.md file', ['changelog', 'verb:readme']);  
+
+
+  // Rebuild the changelog
+  grunt.registerTask('changelog', 'Creates history.txt and git-changelog.md', ['git_changelog']);  
+
+
+  // Update doc server with new docs
+  grunt.registerTask('docserver', 'Pushes docs to standalone doc server', ['exec:docsBranchCheck', 'docs', 'exec:publishDocs']);
+  grunt.registerTask('docserver_fix', 'Regenerates standalone doc server', ['exec:cleanDocs', 'exec:initDocs']); 
+
+
+  /*------------------------------------------------*
+   *                 Default Task                   *
+   *------------------------------------------------*/
+
+
   grunt.registerTask('default', ['jshint', 'server']);
 
 

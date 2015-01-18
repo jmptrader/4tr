@@ -29,8 +29,9 @@
   ],
   "main": "index.js",
   "scripts": {
-    "build": "grunt",
+    "build": "grunt",             
     "test": "grunt test",
+    "ci-test": "mocha -R TAP \"tests/**/*.spec.js\" > test.tap && istanbul report clover",
     "start": "node app.js",
     "verify": "grunt verify --verbose"
   },
@@ -67,6 +68,7 @@
     "sinon": "^1.12.2",
     "superagent": "^0.21.0",
     "supertest": "^0.15.0",
+    "tape": "^3.2.0",
     "time-grunt": "^1.0.0",
     "yuidoc-bootstrap-theme": "^1.0.4",
     "yuidoc2md": "^0.4.8"

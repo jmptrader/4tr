@@ -30,6 +30,8 @@ coverage
 # Ignore doc and build related directories
 /docs
 /build
+/tests/benchmarks
+/tests/jslint
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release

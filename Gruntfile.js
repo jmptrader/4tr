@@ -1,3 +1,7 @@
+/*jslint node: true */
+/*jshint strict:false */
+'use strict';
+
 module.exports = function (grunt) {
 
 /* 
@@ -134,6 +138,47 @@ module.exports = function (grunt) {
      *--------------------------------*/
 
 
+     jslint: { // configure the task
+      // lint server code
+      server: {
+        src: [
+          'Gruntfile.js',
+          'app.js',
+          '<%= gc.srcDir %>/**/*.js',
+          '<%= gc.testsDir %>/**/*.js'
+        ],
+        directives: {
+          node: true,
+          todo: true
+        },
+        options: {
+          edition: 'latest',
+          errorsOnly: true, // only display errors
+          failOnError: false, // defaults to true
+          log: '<%= gc.testsDir %>/jslint/server-lint.log',
+          junit: '<%= gc.testsDir %>/jslint/server-junit.xml', // write the output to a JUnit XML
+          jslintXml: '<%= gc.testsDir %>/jslint/server-jslint.xml',
+          checkstyle: '<%= gc.testsDir %>/jslint/server-checkstyle.xml'
+        }
+      },
+      // lint client code
+      // client: {
+      //   src: [
+      //     '<%= gc.srcDir %>/client/**/*.js'
+      //   ],
+      //   directives: {
+      //     browser: true,
+      //     predef: [
+      //       'jQuery'
+      //     ]
+      //   },
+      //   options: {
+      //     junit: 'out/client-junit.xml'
+      //   }
+      // }
+    },
+
+
     // Static code analysis and code style enforcement
     jshint: {
       options: {
@@ -141,7 +186,12 @@ module.exports = function (grunt) {
         ignores: ['<%= gc.testsDir %>/coverage/**/*.js']
       },
       files: {
-        src: ['<%= gc.modelsSrcDir %>/**/*.js', '<%= gc.testsDir %>/**/*.js']
+        src: [
+          'Gruntfile.js',
+          'app.js',  
+          '<%= gc.srcDir %>/**/*.js',
+          '<%= gc.testsDir %>/**/*.js'
+        ]
       },
       gruntfile: {
         src: 'Gruntfile.js'
@@ -156,9 +206,8 @@ module.exports = function (grunt) {
       modify: {
         src: [
           'Gruntfile.js',
-          'apgc.js',  
-          '<%= gc.modelsSrcDir %>/**/*.js',
-          '<%= gc.routesSrcDir %>/**/*.js',
+          'app.js',  
+          '<%= gc.srcDir %>/**/*.js',
           '<%= gc.testsDir %>/**/*.js'
         ],
         options: {
@@ -169,9 +218,8 @@ module.exports = function (grunt) {
       verify: {
         src: [
           'Gruntfile.js',
-          'apgc.js',  
-          '<%= gc.modelsSrcDir %>/**/*.js',
-          '<%= gc.routesSrcDir %>/**/*.js',
+          'app.js',  
+          '<%= gc.srcDir %>/**/*.js',
           '<%= gc.testsDir %>/**/*.js'
         ],
         options: {
@@ -426,7 +474,7 @@ module.exports = function (grunt) {
         tasks: ['clear']
       },
       lint: {
-        files: '<%= gc.jshint.files.src %>',
+        files: ['<%= gc.srcDir %>'],
         tasks: 'jshint'
       },
       // test: {
@@ -697,7 +745,7 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('polish', ['jsbeautifier:modify', 'jshint']);
-  grunt.registerTask('verify', ['jsbeautifier:verify', 'jshint']);
+  grunt.registerTask('verify', ['jsbeautifier:verify', 'jshint', 'jslint']);
 
 
   /*------------------------------------------------*
@@ -787,7 +835,7 @@ module.exports = function (grunt) {
 
 
   // Code monitoring - Watch for code changes and run tests or restart server as necessary
-  grunt.registerTask('server', ['concurrent:target']);
+  grunt.registerTask('auto-watch', ['concurrent:target']);
 
 
   /*------------------------------------------------*
@@ -798,9 +846,10 @@ module.exports = function (grunt) {
   // Allows running of a single test file
   grunt.registerTask('info', 'Displays project information to console', function () {
     var pkg = grunt.file.readJSON('package.json');
-    var banner = pkg.name + ' v' + pkg.version;
-        banner += '\n' + pkg.description + '\n' + pkg.repository.url + '\n';
-        banner += 'Built on ' + grunt.template.today("yyyy-mm-dd") + '\n';
+    var banner = pkg.name + ' v' + pkg.version + '\n' 
+               + pkg.description + '\n' 
+               + pkg.repository.url + '\n' 
+               + 'Built on ' + grunt.template.today("yyyy-mm-dd") + '\n';
     grunt.log.writeln(banner);
   });
 
@@ -829,7 +878,7 @@ module.exports = function (grunt) {
    *------------------------------------------------*/
 
 
-  grunt.registerTask('default', ['jshint', 'server']);
+  grunt.registerTask('default', ['verify', 'auto-watch']);
 
 
 };

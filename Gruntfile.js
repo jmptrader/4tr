@@ -190,8 +190,6 @@ module.exports = function (grunt) {
     mochaTest: {
 
       // Runs a single test
-      // Matches any spec name in the tests directory
-      // Format for calling is     grunt spec:mochaTest:api-collections
       spec: {
         src: 'src/**/*.js',
         options: {
@@ -646,11 +644,6 @@ module.exports = function (grunt) {
 
 
     // Release automation with https://github.com/geddski/grunt-release
-    // grunt release
-    // grunt release:patch
-    // grunt release:minor
-    // grunt release:major
-    // grunt release:prerelease
     release: {
       options: {
         bump: true,
@@ -689,9 +682,11 @@ module.exports = function (grunt) {
 
   });
 
+
   /*------------------------------------------------*
    *       Load grunt tasks from package.json       *
    *------------------------------------------------*/
+
 
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
@@ -709,6 +704,13 @@ module.exports = function (grunt) {
    *                  Build Tasks                   *
    *------------------------------------------------*/
 
+
+  // Release automation with https://github.com/geddski/grunt-release
+  // grunt release
+  // grunt release:patch
+  // grunt release:minor
+  // grunt release:major
+  // grunt release:prerelease
 
   // grunt.registerTask('prod-release', 'Builds, tests, versions, tags, and publishes a new version of the project.', [
   //   'clean:release',
@@ -766,9 +768,10 @@ module.exports = function (grunt) {
   
 
   // Allows running of a single test file
+  // Matches any spec name in the tests directory
+  // Format for calling is     grunt spec:mochaTest:api-collections
   grunt.registerTask('spec', 'Runs a specific test Grunt spec:api-collections ', function (taskName, fileName) {
     gc.file = fileName;
-    //grunt.log.writeln(gc.file);
     grunt.log.writeln(taskName + ':spec ' + gc.file);
     grunt.task.run(taskName + ':spec');
   });
@@ -794,9 +797,10 @@ module.exports = function (grunt) {
 
   // Allows running of a single test file
   grunt.registerTask('info', 'Displays project information to console', function () {
-    var banner = '/*\n<%= pkg.name %> <%= pkg.version %>';
-        banner += '- <%= pkg.description %>\n<%= pkg.repository.url %>\n';
-        banner += 'Built on <%= grunt.template.today("yyyy-mm-dd") %>\n*/\n';
+    var pkg = grunt.file.readJSON('package.json');
+    var banner = pkg.name + ' v' + pkg.version;
+        banner += '\n' + pkg.description + '\n' + pkg.repository.url + '\n';
+        banner += 'Built on ' + grunt.template.today("yyyy-mm-dd") + '\n';
     grunt.log.writeln(banner);
   });
 

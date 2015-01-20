@@ -321,11 +321,21 @@ module.exports = function (grunt) {
 
     // Generate tap/tape output from tests results
     tape: {
-      options: {
-        pretty: true,
-        output: 'console'
+      pretty: {
+        options: {
+          pretty: true,
+          output: 'console'
+        },
+        files: ['<%= gc.testsDir %>/**/*.spec.js']
       },
-      files: ['<%= gc.testsDir %>/**/*.spec.js']
+      ci: {
+        options: {
+          pretty: false,
+          output: 'file',
+          file: '<%= gc.testsDir %>/output.tap'
+        },
+        files: ['<%= gc.testsDir %>/**/*.spec.js']
+      }
     },
 
 

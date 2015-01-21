@@ -223,19 +223,21 @@ module.exports = function (grunt) {
           'Gruntfile.js',
           'app.js',
           '<%= gc.srcDir %>/**/*.js',
-          '<%= gc.testsDir %>/**/*.js'
+          '<%= gc.testsDir %>/**/*.js',
+          '!<%= gc.testsDir %>/coverage/**/*.js'
         ],
         options: {
           config: '<%= gc.toolsDir %>/jsbeautifyrc.json'
         }
       },
       // Check syntax only
-      verify: {
+      check: {
         src: [
           'Gruntfile.js',
           'app.js',
           '<%= gc.srcDir %>/**/*.js',
-          '<%= gc.testsDir %>/**/*.js'
+          '<%= gc.testsDir %>/**/*.js',
+          '!<%= gc.testsDir %>/coverage/**/*.js'
         ],
         options: {
           mode: 'VERIFY_ONLY',
@@ -770,7 +772,7 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('polish', ['jsbeautifier:modify', 'jshint']);
-  grunt.registerTask('verify', ['jsbeautifier:verify', 'jshint', 'jslint', 'eslint']);
+  grunt.registerTask('check', ['jsbeautifier:check', 'jshint', 'jslint', 'eslint']);
 
 
   /*------------------------------------------------*
@@ -900,7 +902,7 @@ module.exports = function (grunt) {
    *------------------------------------------------*/
 
 
-  grunt.registerTask('default', ['verify', 'auto-watch']);
+  grunt.registerTask('default', ['check', 'auto-watch']);
 
 
 };

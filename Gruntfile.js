@@ -188,7 +188,7 @@ module.exports = function (grunt) {
       files: {
         src: [
           'Gruntfile.js',
-          'app.js',  
+          'app.js',
           '<%= gc.srcDir %>/**/*.js',
           '<%= gc.testsDir %>/**/*.js'
         ]
@@ -206,7 +206,7 @@ module.exports = function (grunt) {
       modify: {
         src: [
           'Gruntfile.js',
-          'app.js',  
+          'app.js',
           '<%= gc.srcDir %>/**/*.js',
           '<%= gc.testsDir %>/**/*.js'
         ],
@@ -218,7 +218,7 @@ module.exports = function (grunt) {
       verify: {
         src: [
           'Gruntfile.js',
-          'app.js',  
+          'app.js',
           '<%= gc.srcDir %>/**/*.js',
           '<%= gc.testsDir %>/**/*.js'
         ],
@@ -251,13 +251,13 @@ module.exports = function (grunt) {
           ui: 'bdd',
           reporter: 'spec',
           require: [
-            '<%= gc.testsDir %>/helpers/chai-helper', 
-            '<%= gc.testsDir %>/helpers/require-helper', 
+            '<%= gc.testsDir %>/helpers/chai-helper',
+            '<%= gc.testsDir %>/helpers/require-helper',
             '<%= gc.testsDir %>/helpers/utils-helper'
           ]
         },
         src: ['tests/unit/**/*.spec.js']
-      }, 
+      },
       
       // Integration tests = Testing the interaction of two or more objects
       integration: {
@@ -265,8 +265,8 @@ module.exports = function (grunt) {
           ui: 'bdd',
           reporter: 'spec',
           require: [
-            '<%= gc.testsDir %>/helpers/chai-helper', 
-            '<%= gc.testsDir %>/helpers/require-helper', 
+            '<%= gc.testsDir %>/helpers/chai-helper',
+            '<%= gc.testsDir %>/helpers/require-helper',
             '<%= gc.testsDir %>/helpers/utils-helper'
           ]
         },
@@ -279,13 +279,13 @@ module.exports = function (grunt) {
           ui: 'bdd',
           reporter: 'spec',
           require: [
-            '<%= gc.testsDir %>/helpers/chai-helper', 
-            '<%= gc.testsDir %>/helpers/require-helper', 
+            '<%= gc.testsDir %>/helpers/chai-helper',
+            '<%= gc.testsDir %>/helpers/require-helper',
             '<%= gc.testsDir %>/helpers/utils-helper'
           ]
         },
         src: ['<%= gc.testsDir %>/functional/**/*.spec.js']
-      } 
+      }
 
     },
 
@@ -480,7 +480,7 @@ module.exports = function (grunt) {
         //clear terminal on any watch task
         //files: ['**/*'], 
         //or be more specific
-        files: ['<%= gc.testsDir %>/**/*'], 
+        files: ['<%= gc.testsDir %>/**/*'],
         tasks: ['clear']
       },
       lint: {
@@ -521,7 +521,7 @@ module.exports = function (grunt) {
           title: 'IMPLEMENTED:\n',
           mask: /(([^\.]+\s)*(Task)(\s[^\.]+)*)/gim,
           // see http://git-scm.com/docs/git-log for mapping content
-          format: ' - #%h %an %ad: %s %b', 
+          format: ' - #%h %an %ad: %s %b',
         },
         {
           title: 'FIXED:\n',
@@ -545,7 +545,7 @@ module.exports = function (grunt) {
          "<%= gc.docsSrcDir %>/verb/*.{json,yml}"
       ],
       readme: {
-        files:[ 
+        files:[
           // {
           //   expand: true, 
           //   cwd: '<%= gc.docsSrcDir %>/verb', 
@@ -553,12 +553,12 @@ module.exports = function (grunt) {
           //   dest: '.', 
           //   ext: '.md'
           // },
-          { 
-            src:  "<%= gc.docsSrcDir %>/verb/authors.src.md", 
+          {
+            src:  "<%= gc.docsSrcDir %>/verb/authors.src.md",
             dest: "<%= gc.docsSrcDir %>/verb/authors.md"
           },
-          { 
-            src:  "<%= gc.docsSrcDir %>/verb/README.src.md", 
+          {
+            src:  "<%= gc.docsSrcDir %>/verb/README.src.md",
             dest: "README.md"
           }
         ]
@@ -570,7 +570,7 @@ module.exports = function (grunt) {
     docco: {
       debug: {
         src: [
-          '<%= gc.modelsSrcDir %>/**/*.js', 
+          '<%= gc.modelsSrcDir %>/**/*.js',
           '<%= gc.testsDir %>/unit/**/*.js'
         ],
         options: {
@@ -588,7 +588,7 @@ module.exports = function (grunt) {
           '<%= gc.modelsSrcDir %>/**/*.js',
           '<%= gc.routesSrcDir %>/**/*.js',
           '<%= gc.viewsSrcDir %>/**/*.js'
-        ], 
+        ],
         options: {
           destination: '<%= gc.buildDir %>/docs/jsdoc',
           template: '<%= gc.root %>/node_modules/ink-docstrap/template',
@@ -611,7 +611,7 @@ module.exports = function (grunt) {
       compileSeperateFiles: {
         files: [
           {
-            src: "<%= gc.modelsSrcDir %>/channel-type.js", 
+            src: "<%= gc.modelsSrcDir %>/channel-type.js",
             dest: "<%= gc.buildDir %>/docs/jsdoc/md/channel-type.md"
           }
         ]
@@ -705,7 +705,7 @@ module.exports = function (grunt) {
     release: {
       options: {
         bump: true,
-        file: "<%= gc.root %>/package.json", 
+        file: "<%= gc.root %>/package.json",
         add: true,
         commit: true,
         tag: false,             //default: true
@@ -819,10 +819,10 @@ module.exports = function (grunt) {
 
   // Testing tasks
   grunt.registerTask('ci-test', 'Continous integration test hook (outputs TAP results)', ['tape:ci']);
-  grunt.registerTask('test', 'Run all unit, integration, and functional tests', ['mochaTest:unit', 'mochaTest:integration', 'mochaTest:functional', 'tape:pretty']);  
-  grunt.registerTask('unit', 'Run unit tests only', ['mochaTest:unit']);  
-  grunt.registerTask('integration', 'Run integration tests only', ['mochaTest:integration']);  
-  grunt.registerTask('functional', 'Run functional tests only', ['mochaTest:functional']);  
+  grunt.registerTask('test', 'Run all unit, integration, and functional tests', ['mochaTest:unit', 'mochaTest:integration', 'mochaTest:functional', 'tape:pretty']);
+  grunt.registerTask('unit', 'Run unit tests only', ['mochaTest:unit']);
+  grunt.registerTask('integration', 'Run integration tests only', ['mochaTest:integration']);
+  grunt.registerTask('functional', 'Run functional tests only', ['mochaTest:functional']);
   
 
   // Allows running of a single test file
@@ -837,7 +837,7 @@ module.exports = function (grunt) {
 
   // Acceptance Testing Tasks
   grunt.registerTask('acceptance', ['benchmark']);
-  grunt.registerTask('benchmark', ['api_benchmark:restApi']); 
+  grunt.registerTask('benchmark', ['api_benchmark:restApi']);
 
 
   // Code coverage task
@@ -856,10 +856,7 @@ module.exports = function (grunt) {
   // Allows running of a single test file
   grunt.registerTask('info', 'Displays project information to console', function () {
     var pkg = grunt.file.readJSON('package.json');
-    var banner = pkg.name + ' v' + pkg.version + '\n' 
-               + pkg.description + '\n' 
-               + pkg.repository.url + '\n' 
-               + 'Built on ' + grunt.template.today("yyyy-mm-dd") + '\n';
+    var banner = pkg.name + ' v' + pkg.version + '\n' + pkg.description + '\n' + pkg.repository.url + '\n' + 'Built on ' + grunt.template.today("yyyy-mm-dd") + '\n';
     grunt.log.writeln(banner);
   });
 
@@ -871,16 +868,16 @@ module.exports = function (grunt) {
 
 
   // Rebuild the readme
-  grunt.registerTask('readme', 'Rebuilds the project\'s readme.md file', ['changelog', 'verb:readme']);  
+  grunt.registerTask('readme', 'Rebuilds the project\'s readme.md file', ['changelog', 'verb:readme']);
 
 
   // Rebuild the changelog
-  grunt.registerTask('changelog', 'Creates history.txt and git-changelog.md', ['git_changelog']);  
+  grunt.registerTask('changelog', 'Creates history.txt and git-changelog.md', ['git_changelog']);
 
 
   // Update doc server with new docs
   grunt.registerTask('docserver', 'Pushes docs to standalone doc server', ['exec:docsBranchCheck', 'docs', 'exec:publishDocs']);
-  grunt.registerTask('docserver_fix', 'Regenerates standalone doc server', ['exec:cleanDocs', 'exec:initDocs']); 
+  grunt.registerTask('docserver_fix', 'Regenerates standalone doc server', ['exec:cleanDocs', 'exec:initDocs']);
 
 
   /*------------------------------------------------*

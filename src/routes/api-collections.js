@@ -1,5 +1,6 @@
-// api-collections.js
-
+/*jslint node: true */
+/*jshint strict:false */
+'use strict';
 
 var express = require('express');
 var router = express.Router();
@@ -18,15 +19,15 @@ router.use(function(req, res, next) {
 });
 
 // Health status endpoint at base of API and at /api/status
-var status = { 
-	    message: 'ok', 
-	    name: module.exports.name, 
-	    mode: app.settings.env, 
-	    version: module.exports.version,
-	    build: module.exports.build
-    };
-router.get('/status', function(req, res) {
-    res.json(status);
+var healthStatus = {
+  message: 'ok',
+  name: module.exports.name,
+  mode: app.settings.env,
+  version: module.exports.version,
+  build: module.exports.build
+};
+router.get('/status', function(req, res, next) {
+  res.json(healthStatus);
 });
 
 
@@ -41,24 +42,24 @@ router.param('collectionName', function(req, res, next, collectionName){
 
 
 // Create an object
-router.post('/collections/:collectionName', function(req, res) {
+router.post('/collections/:collectionName', function(req, res, next) {
   req.collection.insert(req.body, {}, function(e, results){
     if (e) return next(e);
     res.send(results);
-  })
-})
+  });
+});
 
 
 // Find a single object
 router.get('/collections/:collectionName/:id', function(req, res, next) {
   req.collection.findById(req.params.id, function(e, result){
-    if (e) return next(e)    
-    res.send(result)
-  })
-})
+    if (e) return next(e);
+    res.send(result);
+  });
+});
 
 // Retrieve a list of items sorted by _id and which has a limit of 10
-router.get('/collections/:collectionName', function(req, res) {
+router.get('/collections/:collectionName', function(req, res, next) {
   req.collection
     .find({},{limit:10, sort: [['_id',-1]]})
     .toArray(function(e, results){
@@ -70,18 +71,18 @@ router.get('/collections/:collectionName', function(req, res) {
 // Update an object
 router.put('/collections/:collectionName/:id', function(req, res, next) {
   req.collection.updateById(req.params.id, {$set:req.body}, {safe:true, multi:false}, function(e, result){
-    if (e) return next(e)
-    res.send((result===1)?{msg:'success'}:{msg:'error'})
-  })
-})
+    if (e) return next(e);
+    res.send((result===1)?{msg:'success'}:{msg:'error'});
+  });
+});
 
 // Delete an object
 router.delete('/collections/:collectionName/:id', function(req, res, next) {
   req.collection.removeById(req.params.id, function(e, result){
-    if (e) return next(e)
-    res.send((result===1)?{msg:'success'}:{msg:'error'})
-  })
-})
+    if (e) return next(e);
+    res.send((result===1)?{msg:'success'}:{msg:'error'});
+  });
+});
 
 
 module.exports = router;

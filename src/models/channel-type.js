@@ -1,4 +1,6 @@
-// channel-type.js
+/*jslint node: true */
+/*jshint strict:false */
+'use strict';
 /**
 
 The ChannelType object represents a particular kind of input or output on a DeviceType.

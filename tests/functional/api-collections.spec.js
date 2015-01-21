@@ -1,3 +1,7 @@
+/*jslint node: true */
+/*jshint strict:false */
+'use strict';
+
 // Setup superagent and chai expect
 // Note: This is also set in chai-helper.js, but JShint complains if its not here too
 var chai = require('chai');

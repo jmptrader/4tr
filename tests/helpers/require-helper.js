@@ -1,3 +1,6 @@
+/*jslint node: true */
+/*jshint strict:false */
+'use strict';
 /**
  * Updates require path so that instrumented code can be loaded during test coverage analysis
  *

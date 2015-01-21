@@ -1,3 +1,7 @@
+/*jslint node: true */
+/*jshint strict:false */
+'use strict';
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -12,7 +16,7 @@ var env = process.env.NODE_ENV || 'development';
 //var config = require('./config/config')[env];
 var config = require('konfig')({ path: './tools' });
 
-// Setup handlers and components 
+// Setup handlers and components
 //var models = require('./app/models');
 //var middleware = require('./app/middleware');
 var routes = require('./src/routes/index');
@@ -32,7 +36,7 @@ app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'jade');
 
 // Favicon
-app.use(favicon(__dirname + '/src/public/favicon.ico'));
+app.use(favicon(path.join(__dirname, '/src/public/favicon.ico')));
 
 // Logger
 app.use(logger('dev'));
@@ -49,7 +53,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // database
 //mongoose.connect(config.app.db);
 // For remote URIs:   mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]
-var db = mongo.db('mongodb://@localhost:27017/test', {safe:true});
+var db = mongo.db('mongodb://@localhost:27017/test', { safe: true });
 // var server = mongo.Server;
 // var mongoClient = mongo.MongoClient;
 // var replSetServers = mongo.ReplSetServers;
@@ -62,7 +66,7 @@ var db = mongo.db('mongodb://@localhost:27017/test', {safe:true});
 
 
 // Make datastore accessible to our router
-app.use(function(req,res,next){
+app.use(function(req, res, next){
     req.db = db;
     next();
 });
@@ -72,7 +76,7 @@ app.use('/', routes);
 //app.use('/users', users);
 
 // All of the REST API routes will be prefixed by /api
-app.use('/api', apiCollections); 
+app.use('/api', apiCollections);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

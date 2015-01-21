@@ -143,11 +143,12 @@ module.exports = function (grunt) {
         config: '<%= gc.toolsDir %>/eslint.json'
       },
       target: [
-        'Gruntfile.js'
-        // ,
-        // 'app.js',
-        // '<%= gc.srcDir %>/**/*.js',
-        // '<%= gc.testsDir %>/**/*.js'
+        'Gruntfile.js',
+        'app.js',
+        '<%= gc.srcDir %>/**/*.js',
+        '<%= gc.testsDir %>/unit/**/*.js',
+        '<%= gc.testsDir %>/integration/**/*.js',
+        '<%= gc.testsDir %>/functional/**/*.js'
       ]
     },
 

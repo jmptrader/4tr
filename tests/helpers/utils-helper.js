@@ -1,3 +1,6 @@
+/*jslint node: true */
+/*jshint strict:false */
+'use strict';
 /**
  * Promise aware test method
  */

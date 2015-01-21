@@ -24,7 +24,7 @@ var ct = new ChannelType('input', 'temperature', 'F');
 function ChannelType(type, name, units) {
   // TODO: Convert input and output to constants
   this.type   = type  || null;
-  this.name   = name  || "New channel";
+  this.name   = name  || 'New channel';
   this.units  = units || null;
   this.stream = null;
 }
@@ -34,23 +34,23 @@ ChannelType.prototype = {
 
 /**
 @method identity
-@return {string} A human readable descriptor in the format "[type]: [name] in [units]"
+@return {string} A human readable descriptor in the format '[type]: [name] in [units]'
 @example <caption>Usage</caption>
 ```Javascript
 var ct = new ChannelType('input', 'temperature', 'F');
 ct.identity;
-// returns "input: temperature in F"
+// returns 'input: temperature in F'
 ```
 */
   identity: function() {
-    return this.type + ": " + this.name + " in " + this.units ;
+    return this.type + ': ' + this.name + ' in ' + this.units ;
   },
 
 /**
 @method notCovered
 */
   notCovered: function() {
-    return "This should trigger a code coverage violation" ;
+    return 'This should trigger a code coverage violation' ;
   }
 
 };

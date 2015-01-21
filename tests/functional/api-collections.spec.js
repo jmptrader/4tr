@@ -3,7 +3,7 @@
 'use strict';
 
 // Setup superagent and chai expect
-// Note: This is also set in chai-helper.js, but JShint complains if its not here too
+// This is also set in chai-helper.js, but JShint complains if its not here too
 var chai = require('chai');
 var expect = chai.expect;
 var superagent = require('superagent');
@@ -21,7 +21,7 @@ describe('server', function () {
           name: 'John',
           email: 'john@rpjs.co'
         })
-        .end(function(e,res){
+        .end(function(e, res){
           //console.log(res.body)
           expect(e).to.eql(null);
           expect(res.body.length).to.eql(1);
@@ -71,7 +71,7 @@ describe('server', function () {
     });
 
     it('can check an updated object', function(done){
-      superagent.get('http://localhost:3000/api/collections/test/'+id)
+      superagent.get('http://localhost:3000/api/collections/test/' + id)
         .end(function(e, res){
           // console.log(res.body)
           expect(e).to.eql(null);
@@ -84,7 +84,7 @@ describe('server', function () {
     });
 
     it('can remove an object', function(done){
-      superagent.del('http://localhost:3000/api/collections/test/'+id)
+      superagent.del('http://localhost:3000/api/collections/test/' + id)
         .end(function(e, res){
           // console.log(res.body)
           expect(e).to.eql(null);

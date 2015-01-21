@@ -1,0 +1,31 @@
+{
+  "env": {
+    "node": true,
+    "mocha": true
+  },
+  "globals": {
+  },
+  "rules": {
+    "block-scoped-var": 0,
+    "brace-style": ["2", "stroustrup"],
+    "consistent-this": [2, "self"],
+    "no-unused-expressions": 1,
+    "no-unused-vars": [2, "local"],
+    "no-use-before-define": [2, "nofunc"],
+    "no-warning-comments": 2,
+    "quotes": [2, "single"],
+    "radix": 2,
+    "semi": 2,
+    "sort-vars": 0,
+    "space-after-keywords": [2, "always"],
+    "space-in-brackets": 2,
+    "strict": 2,
+    "use-isnan": 2,
+    "valid-jsdoc": [1, {
+      "requireReturn": false
+    }],
+    "valid-typeof": 2,
+    "wrap-iife": 0,
+    "wrap-regex": 0
+  }
+}

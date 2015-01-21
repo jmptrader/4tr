@@ -4,7 +4,7 @@
 
 module.exports = function (grunt) {
 
-/* 
+/*
 
   Practical Continuous Dployment
   From: http://blogs.atlassian.com/2014/04/practical-continuous-deployment/
@@ -100,25 +100,25 @@ module.exports = function (grunt) {
 
   // Create global config (gc)
   var gc = {
-    githubAccount: "jwtd",
+    githubAccount: 'jwtd',
     // The following docServer properties will be used to run git clone <%= gs.docServer %>:<%= gs.docServerUser %>/<%= pkg.name %>-docs.git docs'
     docServer: 'repo@myHost.ing',
     docServerUser: 'no-user-specified',
     root: root,
-    //gruntConfigDir: "<%= gc.root %>/grunt-base/config",
-    srcDir: "src",
-      modelsSrcDir: "src/models",
-      routesSrcDir: "src/routes",
-      viewsSrcDir:  "src/views",
-      publicSrcDir:  "src/public",
-      docsSrcDir:   "src/docs",
-    testsDir: "tests",
-    toolsDir: "tools",
-    dataDir:  "data",
-    buildDir: "build"
-    //sassDir: "<%= gc.root %>/sass",
-    //cssDir: "<%= gc.root %>/css",
-    //jsDir: "<%= gc.root %>/js"
+    //gruntConfigDir: '<%= gc.root %>/grunt-base/config',
+    srcDir: 'src',
+      modelsSrcDir: 'src/models',
+      routesSrcDir: 'src/routes',
+      viewsSrcDir: 'src/views',
+      publicSrcDir: 'src/public',
+      docsSrcDir: 'src/docs',
+    testsDir: 'tests',
+    toolsDir: 'tools',
+    dataDir: 'data',
+    buildDir: 'build'
+    //sassDir: '<%= gc.root %>/sass',
+    //cssDir: '<%= gc.root %>/css',
+    //jsDir: '<%= gc.root %>/js'
   };
 
 
@@ -138,44 +138,17 @@ module.exports = function (grunt) {
      *--------------------------------*/
 
 
-     jslint: { // configure the task
-      // lint server code
-      server: {
-        src: [
-          'Gruntfile.js',
-          'app.js',
-          '<%= gc.srcDir %>/**/*.js',
-          '<%= gc.testsDir %>/**/*.js'
-        ],
-        directives: {
-          node: true,
-          todo: true
-        },
-        options: {
-          edition: 'latest',
-          errorsOnly: true, // only display errors
-          failOnError: false, // defaults to true
-          log: '<%= gc.testsDir %>/jslint/server-lint.log',
-          junit: '<%= gc.testsDir %>/jslint/server-junit.xml', // write the output to a JUnit XML
-          jslintXml: '<%= gc.testsDir %>/jslint/server-jslint.xml',
-          checkstyle: '<%= gc.testsDir %>/jslint/server-checkstyle.xml'
-        }
+    eslint: {
+      options: {
+        config: '<%= gc.toolsDir %>/eslint.json'
       },
-      // lint client code
-      // client: {
-      //   src: [
-      //     '<%= gc.srcDir %>/client/**/*.js'
-      //   ],
-      //   directives: {
-      //     browser: true,
-      //     predef: [
-      //       'jQuery'
-      //     ]
-      //   },
-      //   options: {
-      //     junit: 'out/client-junit.xml'
-      //   }
-      // }
+      target: [
+        'Gruntfile.js'
+        // ,
+        // 'app.js',
+        // '<%= gc.srcDir %>/**/*.js',
+        // '<%= gc.testsDir %>/**/*.js'
+      ]
     },
 
 
@@ -199,9 +172,50 @@ module.exports = function (grunt) {
     },
 
 
+    jslint: {
+      // lint server code
+      server: {
+        src: [
+          'Gruntfile.js',
+          'app.js',
+          '<%= gc.srcDir %>/**/*.js',
+          '<%= gc.testsDir %>/**/*.js'
+        ],
+        directives: {
+          node: true,
+          todo: true
+        },
+        options: {
+          edition: 'latest',
+          errorsOnly: true, // only display errors
+          failOnError: false, // defaults to true
+          log: '<%= gc.testsDir %>/jslint/server-lint.log',
+          junit: '<%= gc.testsDir %>/jslint/server-junit.xml', // write the output to a JUnit XML
+          jslintXml: '<%= gc.testsDir %>/jslint/server-jslint.xml',
+          checkstyle: '<%= gc.testsDir %>/jslint/server-checkstyle.xml'
+        }
+      }
+      // lint client code
+      // client: {
+      //   src: [
+      //     '<%= gc.srcDir %>/client/**/*.js'
+      //   ],
+      //   directives: {
+      //     browser: true,
+      //     predef: [
+      //       'jQuery'
+      //     ]
+      //   },
+      //   options: {
+      //     junit: 'out/client-junit.xml'
+      //   }
+      // }
+    },
+
+
     // Code formatting : https://www.npmjs.com/package/grunt-jsbeautifier
     // Exclude files : ['!foo/bar.js'],
-    jsbeautifier : {
+    jsbeautifier: {
       // Make changes
       modify: {
         src: [
@@ -258,7 +272,7 @@ module.exports = function (grunt) {
         },
         src: ['tests/unit/**/*.spec.js']
       },
-      
+
       // Integration tests = Testing the interaction of two or more objects
       integration: {
         options: {
@@ -292,14 +306,14 @@ module.exports = function (grunt) {
 
     /*
     Benchmarks the API - https://github.com/matteofigus/grunt-api-benchmark
-    
+
     NOTE: https://github.com/matteofigus/grunt-api-benchmark/issues/3
 
     Config options - https://github.com/matteofigus/api-benchmark#route-object
 
     maxMean (Number, default null): if it is a number, generates an error when the mean value for a benchmark cycle is major than the expected value
     maxSingleMean (Number, default null): if it is a number, generates an error when the mean across all the concurrent requests value is major than the expected value
-    
+
     Tune your machine to remove any OS limits on opening and quickly recycling sockets
     sudo sysctl -w kern.maxfiles=25000
     sudo sysctl -w kern.maxfilesperproc=24500
@@ -344,7 +358,7 @@ module.exports = function (grunt) {
      *--------------------------------*/
 
 
-    // Copy all of the app files to a dir for coverage analysis 
+    // Copy all of the app files to a dir for coverage analysis
     copy: {
       application: {
         expand: true,
@@ -387,7 +401,7 @@ module.exports = function (grunt) {
     makeReport: {
       src: '<%= gc.testsDir %>/coverage/reports/**/*.json',
       options: {
-        type: [ 'lcov', 'text' ],
+        type: ['lcov', 'text'],
         dir: '<%= gc.testsDir %>/coverage/reports',
         print: 'detail'
       }
@@ -418,7 +432,7 @@ module.exports = function (grunt) {
     sonar-runner -e
 
     You can increase the Java heap size by running the following:
-    export SONAR_RUNNER_OPTS="-Xmx512m -XX:MaxPermSize=512m"
+    export SONAR_RUNNER_OPTS='-Xmx512m -XX:MaxPermSize=512m'
     */
     sonarRunner: {
       analysis: {
@@ -450,7 +464,7 @@ module.exports = function (grunt) {
     /*--------------------------------*
      *    Code Monitoring Triggers    *
      *--------------------------------*/
-    
+
 
     // Run two or more grunt tasks at once in seperate processes
     concurrent: {
@@ -478,7 +492,7 @@ module.exports = function (grunt) {
     watch: {
       clear: {
         //clear terminal on any watch task
-        //files: ['**/*'], 
+        //files: ['**/*'],
         //or be more specific
         files: ['<%= gc.testsDir %>/**/*'],
         tasks: ['clear']
@@ -512,16 +526,16 @@ module.exports = function (grunt) {
 
     git_changelog: {  // jshint ignore:line
       //cwd: '<%= gc.buildDir %>',
-      manifest: "package.json",
-      history: "<%= gc.docsSrcDir %>/history.txt",
-      changelog: "<%= gc.docsSrcDir %>/verb/git-changelog.md",
+      manifest: 'package.json',
+      history: '<%= gc.docsSrcDir %>/history.txt',
+      changelog: '<%= gc.docsSrcDir %>/verb/git-changelog.md',
       changesSeparator: '\n\t*********',
       masks: [
         {
           title: 'IMPLEMENTED:\n',
           mask: /(([^\.]+\s)*(Task)(\s[^\.]+)*)/gim,
           // see http://git-scm.com/docs/git-log for mapping content
-          format: ' - #%h %an %ad: %s %b',
+          format: ' - #%h %an %ad: %s %b'
         },
         {
           title: 'FIXED:\n',
@@ -539,34 +553,34 @@ module.exports = function (grunt) {
 
     // Generate README.md using verb
     verb: {
-      docs: "<%= gc.docsSrcDir %>/verb",
+      docs: '<%= gc.docsSrcDir %>/verb',
       data: [
-         "<%= gc.root %>/package.json",
-         "<%= gc.docsSrcDir %>/verb/*.{json,yml}"
+         '<%= gc.root %>/package.json',
+         '<%= gc.docsSrcDir %>/verb/*.{json,yml}'
       ],
       readme: {
-        files:[
+        files: [
           // {
-          //   expand: true, 
-          //   cwd: '<%= gc.docsSrcDir %>/verb', 
-          //   src: ['<%= gc.docsSrcDir %>/verb/**/*.src.md'], 
-          //   dest: '.', 
+          //   expand: true,
+          //   cwd: '<%= gc.docsSrcDir %>/verb',
+          //   src: ['<%= gc.docsSrcDir %>/verb/**/*.src.md'],
+          //   dest: '.',
           //   ext: '.md'
           // },
           {
-            src:  "<%= gc.docsSrcDir %>/verb/authors.src.md",
-            dest: "<%= gc.docsSrcDir %>/verb/authors.md"
+            src: '<%= gc.docsSrcDir %>/verb/authors.src.md',
+            dest: '<%= gc.docsSrcDir %>/verb/authors.md'
           },
           {
-            src:  "<%= gc.docsSrcDir %>/verb/README.src.md",
-            dest: "README.md"
+            src: '<%= gc.docsSrcDir %>/verb/README.src.md',
+            dest: 'README.md'
           }
         ]
       }
     },
 
 
-    // Generate docco doxs with 
+    // Generate docco doxs with
     docco: {
       debug: {
         src: [
@@ -580,10 +594,10 @@ module.exports = function (grunt) {
     },
 
 
-    // Generate JSDocs with 
-    jsdoc : {
-      dist : {
-        //src: ['src/*.js', 'test/*.js'], 
+    // Generate JSDocs with
+    jsdoc: {
+      dist: {
+        //src: ['src/*.js', 'test/*.js'],
         src: [
           '<%= gc.modelsSrcDir %>/**/*.js',
           '<%= gc.routesSrcDir %>/**/*.js',
@@ -592,7 +606,7 @@ module.exports = function (grunt) {
         options: {
           destination: '<%= gc.buildDir %>/docs/jsdoc',
           template: '<%= gc.root %>/node_modules/ink-docstrap/template',
-          configure: "<%= gc.toolsDir %>/jsdoc.json"
+          configure: '<%= gc.toolsDir %>/jsdoc.json'
         }
       }
     },
@@ -606,13 +620,13 @@ module.exports = function (grunt) {
           '<%= gc.routesSrcDir %>/**/*.js',
           '<%= gc.viewsSrcDir %>/**/*.js'
         ],
-        dest: "<%= gc.buildDir %>/docs/jsdoc/md/singlefile_doc_markdown_for_<%= pkg.name %>.md"
+        dest: '<%= gc.buildDir %>/docs/jsdoc/md/singlefile_doc_markdown_for_<%= pkg.name %>.md'
       },
       compileSeperateFiles: {
         files: [
           {
-            src: "<%= gc.modelsSrcDir %>/channel-type.js",
-            dest: "<%= gc.buildDir %>/docs/jsdoc/md/channel-type.md"
+            src: '<%= gc.modelsSrcDir %>/channel-type.js',
+            dest: '<%= gc.buildDir %>/docs/jsdoc/md/channel-type.md'
           }
         ]
       }
@@ -620,8 +634,8 @@ module.exports = function (grunt) {
       //     options: {
       //         index: true
       //     },
-      //     src: "models/wardrobe.js",
-      //     dest: "doc/with-index.md"
+      //     src: 'models/wardrobe.js',
+      //     dest: 'doc/with-index.md'
       // }
     },
 
@@ -641,9 +655,9 @@ module.exports = function (grunt) {
             '<%= gc.viewsSrcDir %>'
           ],
           outdir: '<%= gc.buildDir %>/docs/yuidoc',
-          exclude: "lib,docs,build",
-          themedir: "node_modules/yuidoc-bootstrap-theme",
-          helpers: ["node_modules/yuidoc-bootstrap-theme/helpers/helpers.js"]
+          exclude: 'lib,docs,build',
+          themedir: 'node_modules/yuidoc-bootstrap-theme',
+          helpers: ['node_modules/yuidoc-bootstrap-theme/helpers/helpers.js']
         }
       }
     },
@@ -680,7 +694,7 @@ module.exports = function (grunt) {
 
     },
 
- 
+
     /*--------------------------------*
      *        Build Preparation       *
      *--------------------------------*/
@@ -691,8 +705,8 @@ module.exports = function (grunt) {
       coverage: {
         src: ['<%= gc.testsDir %>/coverage/']
       },
-      build: ["build"],
-      release: ["release"]
+      build: ['build'],
+      release: ['release']
     },
 
 
@@ -705,7 +719,7 @@ module.exports = function (grunt) {
     release: {
       options: {
         bump: true,
-        file: "<%= gc.root %>/package.json",
+        file: '<%= gc.root %>/package.json',
         add: true,
         commit: true,
         tag: false,             //default: true
@@ -717,7 +731,7 @@ module.exports = function (grunt) {
         commitMessage: 'Release <%= pkg.name %> v<%= gc.version %>', //default: 'release <%= gc.version %>'
         //tagMessage: 'tagging version <%= gc.version %>', //default: 'Version <%= gc.version %>',
         github: {
-          repo: "<%= gc.githubAccount %>/<%= pkg.name %>",   // Github repo here
+          repo: '<%= gc.githubAccount %>/<%= pkg.name %>',   // Github repo here
           usernameVar: 'GITHUB_USERNAME', //ENVIRONMENT VARIABLE that contains Github username
           passwordVar: 'GITHUB_PASSWORD'  //ENVIRONMENT VARIABLE that contains Github password
         }
@@ -727,13 +741,13 @@ module.exports = function (grunt) {
     // Maintain a build number in https://github.com/creynders/grunt-build-number
     buildnumber: {
       //files: ['package.json', 'bower.json'],
-      package : {}
+      package: {}
     },
 
     // Get the git revision code
-    "git-describe": {
+    'git-describe': {
       options: {
-        template: "{%=tag%}-{%=since%}-{%=object%}{%=dirty%}"
+        template: '{%=tag%}-{%=since%}-{%=object%}{%=dirty%}'
       }
     }
 
@@ -755,7 +769,7 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('polish', ['jsbeautifier:modify', 'jshint']);
-  grunt.registerTask('verify', ['jsbeautifier:verify', 'jshint', 'jslint']);
+  grunt.registerTask('verify', ['jsbeautifier:verify', 'jshint', 'jslint', 'eslint']);
 
 
   /*------------------------------------------------*
@@ -787,7 +801,7 @@ module.exports = function (grunt) {
 
   // Update public/version.json
   grunt.registerTask('version', 'Collects the gitRevision', ['saveRevision', 'tagRevision']);
-  
+
 
   // Collect git info to determine a version tag
   grunt.registerTask('saveRevision', 'Creates git revision string in the format: tag-since-object dirty?"', function() {
@@ -802,7 +816,7 @@ module.exports = function (grunt) {
   grunt.registerTask('tagRevision', 'Creates version.json with build #, pkg version, and git revision', function () {
     grunt.task.requires('git-describe');
     // Make sure our package details are current
-    var p = grunt.file.readJSON('package.json');
+    gc = grunt.file.readJSON('package.json');
     grunt.file.write('<%= gc.publicSrcDir %>/version.json', JSON.stringify({
       build: gc.build,
       version: grunt.config('pkg.version'),
@@ -823,7 +837,7 @@ module.exports = function (grunt) {
   grunt.registerTask('unit', 'Run unit tests only', ['mochaTest:unit']);
   grunt.registerTask('integration', 'Run integration tests only', ['mochaTest:integration']);
   grunt.registerTask('functional', 'Run functional tests only', ['mochaTest:functional']);
-  
+
 
   // Allows running of a single test file
   // Matches any spec name in the tests directory
@@ -856,14 +870,14 @@ module.exports = function (grunt) {
   // Allows running of a single test file
   grunt.registerTask('info', 'Displays project information to console', function () {
     var pkg = grunt.file.readJSON('package.json');
-    var banner = pkg.name + ' v' + pkg.version + '\n' + pkg.description + '\n' + pkg.repository.url + '\n' + 'Built on ' + grunt.template.today("yyyy-mm-dd") + '\n';
+    var banner = pkg.name + ' v' + pkg.version + '\n' + pkg.description + '\n' + pkg.repository.url + '\n' + 'Built on ' + grunt.template.today('yyyy-mm-dd') + '\n';
     grunt.log.writeln(banner);
   });
 
 
   // Generate api docs
-  grunt.registerTask("docs", 'Generate all project documentation', ['exec:docsDestroy', 'docco', 'jsdocs', 'yuidocs', 'verb:readme']);
-  grunt.registerTask("jsdocs", 'Generate jsdocs', ['jsdoc', 'jsdoc2md']);
+  grunt.registerTask('docs', 'Generate all project documentation', ['exec:docsDestroy', 'docco', 'jsdocs', 'yuidocs', 'verb:readme']);
+  grunt.registerTask('jsdocs', 'Generate jsdocs', ['jsdoc', 'jsdoc2md']);
   grunt.registerTask('yuidocs', 'Generate yuidocs', ['yuidoc:compile']);
 
 

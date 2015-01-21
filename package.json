@@ -49,6 +49,7 @@
     "grunt-contrib-yuidoc": "^0.6.0",
     "grunt-docco": "^0.3.3",
     "grunt-env": "^0.4.2",
+    "grunt-eslint": "^4.0.0",
     "grunt-exec": "^0.4.6",
     "grunt-git-changelog": "^0.1.0",
     "grunt-git-describe": "^2.3.2",

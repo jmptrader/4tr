@@ -26,7 +26,7 @@ var healthStatus = {
   version: module.exports.version,
   build: module.exports.build
 };
-router.get('/status', function(req, res, next) {
+router.get('/status', function(req, res) {
   res.json(healthStatus);
 });
 
@@ -44,7 +44,9 @@ router.param('collectionName', function(req, res, next, collectionName){
 // Create an object
 router.post('/collections/:collectionName', function(req, res, next) {
   req.collection.insert(req.body, {}, function(e, results){
-    if (e) return next(e);
+    if (e) {
+      return next(e);
+    }
     res.send(results);
   });
 });
@@ -53,7 +55,9 @@ router.post('/collections/:collectionName', function(req, res, next) {
 // Find a single object
 router.get('/collections/:collectionName/:id', function(req, res, next) {
   req.collection.findById(req.params.id, function(e, result){
-    if (e) return next(e);
+    if (e) {
+      return next(e);
+    }
     res.send(result);
   });
 });
@@ -63,7 +67,9 @@ router.get('/collections/:collectionName', function(req, res, next) {
   req.collection
     .find({}, {limit: 10, sort: [['_id', -1]]})
     .toArray(function(e, results){
-      if (e) return next(e);
+      if (e) {
+        return next(e);
+      }
       res.send(results);
     });
 });
@@ -71,7 +77,9 @@ router.get('/collections/:collectionName', function(req, res, next) {
 // Update an object
 router.put('/collections/:collectionName/:id', function(req, res, next) {
   req.collection.updateById(req.params.id, {$set: req.body}, {safe: true, multi: false}, function(e, result){
-    if (e) return next(e);
+    if (e) {
+      return next(e);
+    }
     res.send((result === 1) ? {msg: 'success'} : {msg: 'error'});
   });
 });
@@ -79,7 +87,9 @@ router.put('/collections/:collectionName/:id', function(req, res, next) {
 // Delete an object
 router.delete('/collections/:collectionName/:id', function(req, res, next) {
   req.collection.removeById(req.params.id, function(e, result){
-    if (e) return next(e);
+    if (e) {
+      return next(e);
+    }
     res.send((result === 1) ? {msg: 'success'} : {msg: 'error'});
   });
 });

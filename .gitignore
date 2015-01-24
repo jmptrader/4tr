@@ -32,6 +32,7 @@ coverage
 /build
 /tests/benchmarks
 /tests/jslint
+/tests/output.tap
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release

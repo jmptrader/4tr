@@ -273,7 +273,7 @@ module.exports = function (grunt) {
             '<%= gc.testsDir %>/helpers/utils-helper'
           ]
         },
-        src: ['tests/unit/**/*.spec.js']
+        src: ['<%= gc.testsDir %>/unit/**/*.spec.js']
       },
 
       // Integration tests = Testing the interaction of two or more objects
@@ -302,8 +302,51 @@ module.exports = function (grunt) {
           ]
         },
         src: ['<%= gc.testsDir %>/functional/**/*.spec.js']
-      }
+      },
 
+
+      // Unit tests = The smallest unit of functionality that can be tested
+      ci: {
+        options: {
+          reporter: 'tap',
+          captureFile: '<%= gc.testsDir %>/output.tap',
+          require: [
+            '<%= gc.testsDir %>/helpers/chai-helper',
+            '<%= gc.testsDir %>/helpers/require-helper',
+            '<%= gc.testsDir %>/helpers/utils-helper'
+          ]
+        },
+        src: [
+          '<%= gc.testsDir %>/unit/**/*.spec.js',
+          '<%= gc.testsDir %>/integration/**/*.spec.js',
+          '<%= gc.testsDir %>/functional/**/*.spec.js'
+          ]
+      },
+
+    },
+
+
+    // Generate tap/tape output from tests results
+    tape: {
+      pretty: {
+        options: {
+          pretty: true,
+          output: 'console'
+        },
+        files: {
+          src: ['<%= gc.testsDir %>/**/*.spec.js']
+        }
+      },
+      ci: {
+        options: {
+          pretty: false,
+          output: 'file',
+          file: '<%= gc.testsDir %>/output.tap'
+        },
+        files: {
+          src: ['<%= gc.testsDir %>/**/*.spec.js']
+        }
+      }
     },
 
 
@@ -334,26 +377,6 @@ module.exports = function (grunt) {
           'api-benchmark.html': '<%= gc.testsDir %>/acceptance/api-benchmark.json',
           'api-benchmark.json': '<%= gc.testsDir %>/acceptance/api-benchmark.json'
         }
-      }
-    },
-
-
-    // Generate tap/tape output from tests results
-    tape: {
-      pretty: {
-        options: {
-          pretty: true,
-          output: 'console'
-        },
-        files: ['<%= gc.testsDir %>/**/*.spec.js']
-      },
-      ci: {
-        options: {
-          pretty: false,
-          output: 'file',
-          file: '<%= gc.testsDir %>/output.tap'
-        },
-        files: ['<%= gc.testsDir %>/**/*.spec.js']
       }
     },
 

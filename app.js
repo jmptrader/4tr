@@ -11,10 +11,9 @@ var bodyParser = require('body-parser');
 var mongo = require('mongoskin');
 
 // Setup different environments: development, test, production
-var env = process.env.NODE_ENV || 'development';
-
+//var env = process.env.NODE_ENV || 'development';
 //var config = require('./config/config')[env];
-var config = require('konfig')({ path: './tools' });
+var config = require('konfig')({ path: './tools/' });
 
 // Setup handlers and components
 //var models = require('./app/models');

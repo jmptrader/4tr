@@ -29,7 +29,7 @@ In order of precedence, he plugin looks for .jsbeautifyrc in the following place
     "indent_inner_html": false,      // Indent <head> and <body> sections
     "indent_scripts": "keep",        // [keep|separate|normal]
     "indent_size": 4,                // Indentation size
-    "max_preserve_newlines": 10,     // Maximum number of line-breaks to be preserved in one chunk
+    "max_preserve_newlines": 3,     // Maximum number of line-breaks to be preserved in one chunk
     "preserve_newlines": true,       // Preserve existing line-breaks
     "wrap_line_length": 0,           // Maximum characters per line (0 disables)
 
@@ -66,7 +66,7 @@ In order of precedence, he plugin looks for .jsbeautifyrc in the following place
     "jslint_happy": false,              // Enable jslint-stricter mode
     "keep_array_indentation": false,    // Preserve array indentation
     "keep_function_indentation": false,
-    "max_preserve_newlines": 2,        // Number of line-breaks to be preserved in one chunk
+    "max_preserve_newlines": 10,        // Number of line-breaks to be preserved in one chunk
     "preserve_newlines": true,          // Preserve line-breaks
     "space_after_anon_function": false, // Add a space before an anonymous function's parens, ie. function ()
     "space_before_conditional": true,

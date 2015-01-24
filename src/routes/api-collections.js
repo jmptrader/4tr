@@ -1,10 +1,12 @@
 /*jslint node: true */
 /*jshint strict:false */
+/*eslint-disable */
 'use strict';
 
 var express = require('express');
 var router = express.Router();
 var app = express();
+/*eslint-enable */
 
 // Get details from package.json for the healthcheck response
 var pkginfo = require('pkginfo')(module, 'name', 'version', 'build');
@@ -80,7 +82,7 @@ router.put('/collections/:collectionName/:id', function(req, res, next) {
     if (e) {
       return next(e);
     }
-    res.send((result === 1) ? {msg: 'success'} : {msg: 'error'});
+    res.send(result === 1 ? {msg: 'success'} : {msg: 'error'});
   });
 });
 
@@ -90,7 +92,7 @@ router.delete('/collections/:collectionName/:id', function(req, res, next) {
     if (e) {
       return next(e);
     }
-    res.send((result === 1) ? {msg: 'success'} : {msg: 'error'});
+    res.send(result === 1 ? {msg: 'success'} : {msg: 'error'});
   });
 });
 

@@ -323,7 +323,9 @@ module.exports = function (grunt) {
     sudo sysctl -w kern.ipc.somaxconn=20000
     ulimit -S -n 20000
     */
+    /*eslint-disable */
     api_benchmark: {
+    /*eslint-enable */
       restApi: {
         options: {
           output: '<%= gc.testsDir %>/benchmarks/'
@@ -526,8 +528,9 @@ module.exports = function (grunt) {
      *      Project Documentation     *
      *--------------------------------*/
 
-
+    /*eslint-disable */
     git_changelog: {  // jshint ignore:line
+    /*eslint-enable */
       //cwd: '<%= gc.buildDir %>',
       manifest: 'package.json',
       history: '<%= gc.docsSrcDir %>/history.txt',

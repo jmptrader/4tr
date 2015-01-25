@@ -359,30 +359,24 @@ module.exports = function (grunt) {
       },
 
 
+      /*
+      travis-cov  https://github.com/alex-seville/travis-cov
+      The travis-cov reporter will fail the tests if the coverage falls below the 
+      threshold configured in package.json
 
-    },
-
-
-    // Generate tap/tape output from tests results
-    tape: {
-      pretty: {
-        options: {
-          pretty: true,
-          output: 'console'
+        "config": {
+          "travis-cov": {
+            // Yes, I like to set the coverage threshold to 100% ;)
+            "threshold": 100
+          }
         },
-        files: {
-          src: ['<%= gc.testsDir %>/**/*.spec.js']
-        }
-      },
-      ci: {
+
+      */
+      'travis-cov': {
         options: {
-          pretty: false,
-          output: 'file',
-          file: '<%= gc.testsDir %>/output.tap'
+          reporter: 'travis-cov'
         },
-        files: {
-          src: ['<%= gc.testsDir %>/**/*.spec.js']
-        }
+        src: ['<%= gc.testsDir %>/**/*.spec.js']
       }
     },
 

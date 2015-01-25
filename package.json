@@ -36,6 +36,7 @@
     "verify": "grunt verify --verbose"
   },
   "devDependencies": {
+    "blanket": "^1.1.6",
     "chai": "^1.10.0",
     "grunt": "^0.4.5",
     "grunt-api-benchmark": "^0.1.2",

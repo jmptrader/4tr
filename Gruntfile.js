@@ -323,6 +323,43 @@ module.exports = function (grunt) {
           ]
       },
 
+
+      // Unit tests = The smallest unit of functionality that can be tested
+      test: {
+        options: {
+          reporter: 'spec',
+          // Require blanket wrapper here to instrument other required
+          // files on the fly. 
+          //
+          // NB. We cannot require blanket directly as it
+          // detects that we are not running mocha cli and loads differently.
+          //
+          // NNB. As mocha is 'clever' enough to only run the tests once for
+          // each file the following coverage task does not actually run any
+          // tests which is why the coverage instrumentation has to be done here
+          require: [
+            '<%= gc.testsDir %>/helpers/blanket',
+            '<%= gc.testsDir %>/helpers/chai-helper',
+            '<%= gc.testsDir %>/helpers/require-helper',
+            '<%= gc.testsDir %>/helpers/utils-helper'
+          ]
+        },
+        src: ['<%= gc.testsDir %>/**/*.spec.js']
+      },
+      coverage: {
+        options: {
+          reporter: 'html-cov',
+          // use the quiet flag to suppress the mocha console output
+          quiet: true,
+          // specify a destination file to capture the mocha
+          // output (the quiet option does not suppress this)
+          captureFile: '<%= gc.testsDir %>/coverage/blanket-coverage.html'
+        },
+        src: ['<%= gc.testsDir %>/**/*.spec.js']
+      },
+
+
+
     },
 
 
@@ -885,6 +922,7 @@ module.exports = function (grunt) {
 
   // Code coverage task
   grunt.registerTask('cover', ['clean:coverage', 'copy:application', 'env:coverage', 'instrument', 'test', 'storeCoverage', 'makeReport', 'coverage']);
+  grunt.registerTask('blanket-cover', ['mochaTest:test', 'mochaTest:test', 'mochaTest:coverage']);
 
 
   // Code monitoring - Watch for code changes and run tests or restart server as necessary

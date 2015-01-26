@@ -3,20 +3,21 @@
   <meta charset="utf-8">
   <title>Mocha Tests</title>
   <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
-</head>
-<body>
-  <div id="mocha"></div>
   <script src="../node_modules/mocha/mocha.js"></script>
   <script src="../node_modules/chai/chai.js"></script>
   <script src="../node_modules/sinon/lib/sinon.js"></script>
 
   <script>
+
+    window.expect = chai.expect;
+
     mocha.setup('bdd')
     mocha.reporter('html');
+
   </script>
 
   <!-- Tests -->
-  <script src="channel-type.spec.js"></script>
+  <script src="unit/channel-type.spec.js"></script>
 
   <script>
     // Only tests run in real browser, injected script run if options.run == true
@@ -24,5 +25,8 @@
       mocha.run();
     }
   </script>
+</head>
+<body>
+  <div id="mocha"></div>
 </body>
 </html>

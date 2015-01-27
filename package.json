@@ -60,6 +60,7 @@
     "grunt-jsdoc": "^0.5.7",
     "grunt-jsdoc-to-markdown": "^0.4.2",
     "grunt-jslint": "^1.1.12",
+    "grunt-mocha-cov": "^0.3.0",
     "grunt-mocha-test": "^0.12.4",
     "grunt-release": "^0.9.0",
     "grunt-sonar-runner": "^2.4.1",

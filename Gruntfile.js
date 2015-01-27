@@ -113,6 +113,7 @@ module.exports = function (grunt) {
       publicSrcDir: 'src/public',
       docsSrcDir: 'src/docs',
     testsDir: 'tests',
+    coverageDir: 'coverage',
     toolsDir: 'tools',
     dataDir: 'data',
     buildDir: 'build'
@@ -156,8 +157,7 @@ module.exports = function (grunt) {
     // Static code analysis and code style enforcement
     jshint: {
       options: {
-        jshintrc: '<%= gc.toolsDir %>/jshintrc.json',
-        ignores: ['<%= gc.testsDir %>/coverage/**/*.js']
+        jshintrc: '<%= gc.toolsDir %>/jshintrc.json'
       },
       files: {
         src: [
@@ -223,8 +223,7 @@ module.exports = function (grunt) {
           'Gruntfile.js',
           'app.js',
           '<%= gc.srcDir %>/**/*.js',
-          '<%= gc.testsDir %>/**/*.js',
-          '!<%= gc.testsDir %>/coverage/**/*.js'
+          '<%= gc.testsDir %>/**/*.js'
         ],
         options: {
           config: '<%= gc.toolsDir %>/jsbeautifyrc.json'
@@ -236,8 +235,7 @@ module.exports = function (grunt) {
           'Gruntfile.js',
           'app.js',
           '<%= gc.srcDir %>/**/*.js',
-          '<%= gc.testsDir %>/**/*.js',
-          '!<%= gc.testsDir %>/coverage/**/*.js'
+          '<%= gc.testsDir %>/**/*.js'
         ],
         options: {
           mode: 'VERIFY_ONLY',
@@ -248,8 +246,57 @@ module.exports = function (grunt) {
 
 
     /*--------------------------------*
+     *        Build Preparation       *
+     *--------------------------------*/
+
+
+    // Clean out old test coverage reports before each run
+    clean: {
+      istanbul: {
+        src: ['<%= gc.coverageDir %>/istanbul']
+      },
+      blanket: {
+        src: ['<%= gc.coverageDir %>/blanket/']
+      },
+      build: ['build'],
+      release: ['release']
+    },
+
+
+    /*--------------------------------*
      *          Test suite            *
      *--------------------------------*/
+
+
+    /*
+    Benchmarks the API - https://github.com/matteofigus/grunt-api-benchmark
+
+    NOTE: https://github.com/matteofigus/grunt-api-benchmark/issues/3
+
+    Config options - https://github.com/matteofigus/api-benchmark#route-object
+
+    maxMean (Number, default null): if it is a number, generates an error when the mean value for a benchmark cycle is major than the expected value
+    maxSingleMean (Number, default null): if it is a number, generates an error when the mean across all the concurrent requests value is major than the expected value
+
+    Tune your machine to remove any OS limits on opening and quickly recycling sockets
+    sudo sysctl -w kern.maxfiles=25000
+    sudo sysctl -w kern.maxfilesperproc=24500
+    sudo sysctl -w kern.ipc.somaxconn=20000
+    ulimit -S -n 20000
+    */
+    /*eslint-disable */
+    api_benchmark: {
+    /*eslint-enable */
+      restApi: {
+        options: {
+          output: '<%= gc.testsDir %>/benchmarks/'
+        },
+        files: {
+          'api-benchmark.html': '<%= gc.testsDir %>/acceptance/api-benchmark.json',
+          'api-benchmark.json': '<%= gc.testsDir %>/acceptance/api-benchmark.json'
+        }
+      }
+    },
 
 
     mochaTest: {
@@ -323,10 +370,10 @@ module.exports = function (grunt) {
           ]
       },
 
-
-      // Unit tests = The smallest unit of functionality that can be tested
-      test: {
+      // Run blanket coverage tests
+      blanketCoverage: {
         options: {
+          clearRequireCache: true,
           reporter: 'spec',
           // Require blanket wrapper here to instrument other required
           // files on the fly. 
@@ -344,20 +391,29 @@ module.exports = function (grunt) {
             '<%= gc.testsDir %>/helpers/utils-helper'
           ]
         },
-        src: ['<%= gc.testsDir %>/**/*.spec.js']
+        src: [
+          '<%= gc.testsDir %>/unit/**/*.spec.js',
+          '<%= gc.testsDir %>/integration/**/*.spec.js',
+          '<%= gc.testsDir %>/functional/**/*.spec.js'
+        ]
       },
-      coverage: {
+
+      // Code coverage with blanket
+      blanketReport: {
         options: {
           reporter: 'html-cov',
           // use the quiet flag to suppress the mocha console output
           quiet: true,
           // specify a destination file to capture the mocha
           // output (the quiet option does not suppress this)
-          captureFile: '<%= gc.testsDir %>/coverage/blanket-coverage.html'
+          captureFile: '<%= gc.coverageDir %>/blanket/blanketReport-coverage.html'
         },
-        src: ['<%= gc.testsDir %>/**/*.spec.js']
-      },
-
+        src: [
+          '<%= gc.testsDir %>/unit/**/*.spec.js',
+          '<%= gc.testsDir %>/integration/**/*.spec.js',
+          '<%= gc.testsDir %>/functional/**/*.spec.js'
+        ]
+      }
 
       /*
       travis-cov  https://github.com/alex-seville/travis-cov
@@ -372,43 +428,12 @@ module.exports = function (grunt) {
         },
 
       */
-      'travis-cov': {
-        options: {
-          reporter: 'travis-cov'
-        },
-        src: ['<%= gc.testsDir %>/**/*.spec.js']
-      }
-    },
-
-
-    /*
-    Benchmarks the API - https://github.com/matteofigus/grunt-api-benchmark
-
-    NOTE: https://github.com/matteofigus/grunt-api-benchmark/issues/3
-
-    Config options - https://github.com/matteofigus/api-benchmark#route-object
-
-    maxMean (Number, default null): if it is a number, generates an error when the mean value for a benchmark cycle is major than the expected value
-    maxSingleMean (Number, default null): if it is a number, generates an error when the mean across all the concurrent requests value is major than the expected value
-
-    Tune your machine to remove any OS limits on opening and quickly recycling sockets
-    sudo sysctl -w kern.maxfiles=25000
-    sudo sysctl -w kern.maxfilesperproc=24500
-    sudo sysctl -w kern.ipc.somaxconn=20000
-    ulimit -S -n 20000
-    */
-    /*eslint-disable */
-    api_benchmark: {
-    /*eslint-enable */
-      restApi: {
-        options: {
-          output: '<%= gc.testsDir %>/benchmarks/'
-        },
-        files: {
-          'api-benchmark.html': '<%= gc.testsDir %>/acceptance/api-benchmark.json',
-          'api-benchmark.json': '<%= gc.testsDir %>/acceptance/api-benchmark.json'
-        }
-      }
+      // 'travis-cov': {
+      //   options: {
+      //     reporter: 'travis-cov'
+      //   },
+      //   src: ['<%= gc.testsDir %>/**/*.spec.js']
+      // }
     },
 
 
@@ -423,7 +448,7 @@ module.exports = function (grunt) {
         expand: true,
         flatten: false,
         src: ['<%= gc.srcDir %>/**'],
-        dest: '<%= gc.testsDir %>/coverage/instrument/'
+        dest: '<%= gc.coverageDir %>/istanbul/'
       }
     },
 
@@ -435,7 +460,7 @@ module.exports = function (grunt) {
       ],
       options: {
         lazy: false,
-        basePath: '<%= gc.testsDir %>/coverage/instrument/'
+        basePath: '<%= gc.coverageDir %>/istanbul/'
       }
     },
 
@@ -443,7 +468,7 @@ module.exports = function (grunt) {
     // Point the test runner at the dir with the instrumentated app files
     env: {
       coverage: {
-        APP_DIR_FOR_CODE_COVERAGE: '../../<%= gc.testsDir %>/coverage/instrument/src/'
+        APP_DIR_FOR_CODE_COVERAGE: '../../<%= gc.coverageDir %>/istanbul/src/'
       }
     },
 
@@ -451,17 +476,17 @@ module.exports = function (grunt) {
     // Save the raw coverage analysis data
     storeCoverage: {
       options: {
-        dir: '<%= gc.testsDir %>/coverage/reports'
+        dir: '<%= gc.coverageDir %>/istanbul/'
       }
     },
 
 
     // Generate a coverage report from the raw coverage analysis data
     makeReport: {
-      src: '<%= gc.testsDir %>/coverage/reports/**/*.json',
+      src: '<%= gc.coverageDir %>/istanbul/coverage.json',
       options: {
         type: ['lcov', 'text'],
-        dir: '<%= gc.testsDir %>/coverage/reports',
+        dir: '<%= gc.coverageDir %>/istanbul/',
         print: 'detail'
       }
     },
@@ -477,7 +502,7 @@ module.exports = function (grunt) {
           'functions': 90
         },
         root: '<%= gc.testsDir %>',
-        dir: 'coverage/reports/'
+        dir: '<%= gc.coverageDir %>/istanbul/'
       }
     },
 
@@ -512,8 +537,7 @@ module.exports = function (grunt) {
             projectVersion: '0.0.1',
             sources: ['<%= gc.testsDir %>'].join(','),
             language: 'js',
-            sourceEncoding: 'UTF-8',
-            exclusions: ['<%= gc.testsDir %>/coverage/**']
+            sourceEncoding: 'UTF-8'
           }
         }
       }
@@ -756,21 +780,6 @@ module.exports = function (grunt) {
 
 
     /*--------------------------------*
-     *        Build Preparation       *
-     *--------------------------------*/
-
-
-    // Clean out old test coverage reports before each run
-    clean: {
-      coverage: {
-        src: ['<%= gc.testsDir %>/coverage/']
-      },
-      build: ['build'],
-      release: ['release']
-    },
-
-
-    /*--------------------------------*
      *        Release Automation      *
      *--------------------------------*/
 
@@ -892,8 +901,8 @@ module.exports = function (grunt) {
 
 
   // Testing tasks
-  grunt.registerTask('ci-test', 'Continous integration test hook (outputs TAP results)', ['tape:ci']);
-  grunt.registerTask('test', 'Run all unit, integration, and functional tests', ['mochaTest:unit', 'mochaTest:integration', 'mochaTest:functional', 'tape:pretty']);
+  grunt.registerTask('ci-test', 'Continous integration test hook (outputs TAP results)', ['mochaTest:ci']);
+  grunt.registerTask('test', 'Run all unit, integration, and functional tests', ['mochaTest:unit', 'mochaTest:integration', 'mochaTest:functional']);
   grunt.registerTask('unit', 'Run unit tests only', ['mochaTest:unit']);
   grunt.registerTask('integration', 'Run integration tests only', ['mochaTest:integration']);
   grunt.registerTask('functional', 'Run functional tests only', ['mochaTest:functional']);
@@ -915,8 +924,9 @@ module.exports = function (grunt) {
 
 
   // Code coverage task
-  grunt.registerTask('cover', ['clean:coverage', 'copy:application', 'env:coverage', 'instrument', 'test', 'storeCoverage', 'makeReport', 'coverage']);
-  grunt.registerTask('blanket-cover', ['mochaTest:test', 'mochaTest:test', 'mochaTest:coverage']);
+  grunt.registerTask('cover', ['istanbul-cover']);
+  grunt.registerTask('cover-i', ['clean:istanbul', 'copy:application', 'env:coverage', 'instrument', 'test', 'storeCoverage', 'makeReport', 'coverage']);
+  grunt.registerTask('cover-b', ['clean:blanket', 'mochaTest:blanketCoverage', 'mochaTest:blanketReport']);
 
 
   // Code monitoring - Watch for code changes and run tests or restart server as necessary

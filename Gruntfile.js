@@ -114,7 +114,7 @@ module.exports = function (grunt) {
       docsSrcDir: 'src/docs',
     testsDir: 'tests',
     coverageDir: 'coverage',
-    toolsDir: 'tools',
+    configDir: 'config',
     dataDir: 'data',
     buildDir: 'build'
     //sassDir: '<%= gc.root %>/sass',
@@ -141,7 +141,7 @@ module.exports = function (grunt) {
 
     eslint: {
       options: {
-        config: '<%= gc.toolsDir %>/eslint.json'
+        config: '<%= gc.configDir %>/eslint.json'
       },
       target: [
         'Gruntfile.js',
@@ -157,7 +157,7 @@ module.exports = function (grunt) {
     // Static code analysis and code style enforcement
     jshint: {
       options: {
-        jshintrc: '<%= gc.toolsDir %>/jshintrc.json'
+        jshintrc: '<%= gc.configDir %>/jshintrc.json'
       },
       files: {
         src: [
@@ -218,6 +218,13 @@ module.exports = function (grunt) {
     // Exclude files : ['!foo/bar.js'],
     jsbeautifier: {
       // Make changes
+      test: {
+        src: ['<%= gc.configDir %>/comments.js'],
+        options: {
+          config: '<%= gc.configDir %>/jsbeautifyrc.json'
+        }
+      },
+      // Make changes
       modify: {
         src: [
           'Gruntfile.js',
@@ -226,7 +233,7 @@ module.exports = function (grunt) {
           '<%= gc.testsDir %>/**/*.js'
         ],
         options: {
-          config: '<%= gc.toolsDir %>/jsbeautifyrc.json'
+          config: '<%= gc.configDir %>/jsbeautifyrc.json'
         }
       },
       // Check syntax only
@@ -239,7 +246,7 @@ module.exports = function (grunt) {
         ],
         options: {
           mode: 'VERIFY_ONLY',
-          config: '<%= gc.toolsDir %>/jsbeautifyrc.json'
+          config: '<%= gc.configDir %>/jsbeautifyrc.json'
         }
       }
     },
@@ -256,7 +263,7 @@ module.exports = function (grunt) {
         src: ['<%= gc.coverageDir %>/istanbul']
       },
       blanket: {
-        src: ['<%= gc.coverageDir %>/blanket/']
+        src: ['<%= gc.coverageDir %>/blanket']
       },
       build: ['build'],
       release: ['release']
@@ -690,7 +697,7 @@ module.exports = function (grunt) {
         options: {
           destination: '<%= gc.buildDir %>/docs/jsdoc',
           template: '<%= gc.root %>/node_modules/ink-docstrap/template',
-          configure: '<%= gc.toolsDir %>/jsdoc.json'
+          configure: '<%= gc.configDir %>/jsdoc.json'
         }
       }
     },

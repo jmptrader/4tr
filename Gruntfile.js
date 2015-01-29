@@ -133,6 +133,13 @@ module.exports = function (grunt) {
     // Common paths for our tasks to use
     gc: gc,
 
+    // Debugging task for grunt tasks
+    debug: {
+      options: {
+        open: true // Open node-inspector in Chrome automatically
+      }
+    },
+
 
     /*--------------------------------*
      *        Code Conventions        *

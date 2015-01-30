@@ -616,6 +616,15 @@ module.exports = function (grunt) {
     },
 
 
+    // Starts up server on http://localhost:8000
+    connect: {
+      options: {
+        keepalive: true
+      },
+      server: {}
+    },
+
+
     /*--------------------------------*
      *      Project Documentation     *
      *--------------------------------*/
@@ -678,11 +687,44 @@ module.exports = function (grunt) {
     },
 
 
-    // Generate docco doxs with
+    // Generate ngdocs docs - https://github.com/m7r/grunt-ngdocs
+    ngdocs: {
+      options: {
+        title: "<%= pkg.name %> Docs",
+        dest: '<%= gc.buildDir %>/docs/ngdocs',
+        scripts: ['<%= gc.srcDir %>/**/*.js'],
+        startPage: '/api',
+        html5Mode: true
+        // image: "path/to/my/image.png",
+        // imageLink: "http://my-domain.com",
+        // titleLink: "/api",
+        // bestMatch: true,
+        // analytics: {
+        //   account: 'UA-08150815-0',
+        //   domainName: 'my-domain.com'
+        // },
+        // discussions: {
+        //   shortName: 'my',
+        //   url: 'http://my-domain.com',
+        //   dev: false
+        // }
+      },
+      // tutorial: {
+      //   src: ['content/tutorial/*.ngdoc'],
+      //   title: 'Tutorial'
+      // },
+      // api: {
+      //   src: ['src/**/*.js', '!src/**/*.spec.js'],
+      //   title: 'API Documentation'
+      // }
+    },
+
+
+    // Generate docco docs with
     docco: {
       debug: {
         src: [
-          '<%= gc.modelsSrcDir %>/**/*.js',
+          '<%= gc.srcDir %>/**/*.js',
           '<%= gc.testsDir %>/unit/**/*.js'
         ],
         options: {
@@ -697,9 +739,7 @@ module.exports = function (grunt) {
       dist: {
         //src: ['src/*.js', 'test/*.js'],
         src: [
-          '<%= gc.modelsSrcDir %>/**/*.js',
-          '<%= gc.routesSrcDir %>/**/*.js',
-          '<%= gc.viewsSrcDir %>/**/*.js'
+          '<%= gc.srcDir %>/**/*.js'
         ],
         options: {
           destination: '<%= gc.buildDir %>/docs/jsdoc',
@@ -714,9 +754,7 @@ module.exports = function (grunt) {
     jsdoc2md: {
       compileSingleFile: {
         src: [
-          '<%= gc.modelsSrcDir %>/**/*.js',
-          '<%= gc.routesSrcDir %>/**/*.js',
-          '<%= gc.viewsSrcDir %>/**/*.js'
+          '<%= gc.srcDir %>/**/*.js'
         ],
         dest: '<%= gc.buildDir %>/docs/jsdoc/md/singlefile_doc_markdown_for_<%= pkg.name %>.md'
       },
@@ -748,9 +786,7 @@ module.exports = function (grunt) {
         // Options mirror cli flags http://yui.github.io/yuidoc/args/index.html
         options: {
           paths: [
-            '<%= gc.modelsSrcDir %>',
-            '<%= gc.routesSrcDir %>',
-            '<%= gc.viewsSrcDir %>'
+            '<%= gc.srcDir %>'
           ],
           outdir: '<%= gc.buildDir %>/docs/yuidoc',
           exclude: 'lib,docs,build',

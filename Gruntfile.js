@@ -101,6 +101,8 @@ module.exports = function (grunt) {
   // Create global config (gc)
   var gc = {
     githubAccount: 'jwtd',
+    jiraUsername: process.env.VIRTRU_JIRA_UN,
+    jiraPassword: process.env.VIRTRU_JIRA_PW,
     // The following docServer properties will be used to run git clone <%= gs.docServer %>:<%= gs.docServerUser %>/<%= pkg.name %>-docs.git docs'
     docServer: 'repo@myHost.ing',
     docServerUser: 'no-user-specified',
@@ -777,7 +779,7 @@ module.exports = function (grunt) {
     release: {
       options: {
         bump: true,
-        file: '<%= gc.root %>/package.json',
+        file: 'package.json',
         add: true,
         commit: true,
         tag: false,             //default: true
@@ -813,25 +815,25 @@ module.exports = function (grunt) {
     /*
     https://github.com/opentable/grunt-ccb
     */
-    // ccb: {
-    //   options: {
-    //     jira: {
-    //       api_url: "https://company.atlassian.net/rest/api/2/",
-    //       proxy : null,
-    //       user: "user",
-    //       password: "password",
-    //       project_id: 12100,
-    //       ccb_issue_type: 20,
-    //       ccb_done_state: 11
-    //     },
-    //     project: {
-    //       name: "Location API",
-    //       version: "1.0.1"
-    //     },
-    //     manifest: "tests/data/manifest.json",
-    //     build_label: "project_123"
-    //   }
-    // },
+    ccb: {
+      options: {
+        jira: {
+          api_url: "https://virtru.atlassian.net/rest/api/2/",
+          proxy : null,
+          user: "<%= gc.jiraUsername %>",
+          password: "<%= gc.jiraPassword %>",
+          project_id: 10400, // General Project
+          ccb_issue_type: 3, // Task
+          ccb_done_state: 6  // Done state
+        },
+        project: {
+          name: "<%= pkg.name %>",
+          version: "<%= pkg.version %>"
+        },
+        manifest: "package.json"      // "tests/data/manifest.json",
+        build_label: "<%= pkg.name %>_<%= pkg.version %>"
+      }
+    }//,
 
     /*
     https://github.com/opentable/grunt-github-manifest
@@ -850,7 +852,7 @@ module.exports = function (grunt) {
     //         manifestPath: "commit_history.json",
     //         github: {
     //             o_auth_token: "XXXXXXXX",
-    //             user: "christriddle",
+    //             user: "<%= gc.githubAccount %>",
     //             repo: "grunt-github-manifest",
     //             proxy: null
     //         }

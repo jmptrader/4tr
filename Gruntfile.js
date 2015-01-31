@@ -616,7 +616,7 @@ module.exports = function (grunt) {
     },
 
 
-    // Starts up server on http://localhost:8000
+    // Starts up server on http://localhost:8000/docs
     connect: {
       options: {
         keepalive: true
@@ -628,34 +628,6 @@ module.exports = function (grunt) {
     /*--------------------------------*
      *      Project Documentation     *
      *--------------------------------*/
-
-    /*eslint-disable */
-    git_changelog: {  // jshint ignore:line
-    /*eslint-enable */
-      //cwd: '<%= gc.buildDir %>',
-      manifest: 'package.json',
-      history: '<%= gc.docsSrcDir %>/history.txt',
-      changelog: '<%= gc.docsSrcDir %>/verb/git-changelog.md',
-      changesSeparator: '\n\t*********',
-      masks: [
-        {
-          title: 'IMPLEMENTED:\n',
-          mask: /(([^\.]+\s)*(Task)(\s[^\.]+)*)/gim,
-          // see http://git-scm.com/docs/git-log for mapping content
-          format: ' - #%h %an %ad: %s %b'
-        },
-        {
-          title: 'FIXED:\n',
-          mask: /(([^\.]+\s)*(Bug)(\s[^\.]+)*)/gim,
-          format: ' - #%h %an %ad: %s %b'
-        },
-        {
-          title: 'OTHERS:\n',
-          mask: /./gim,
-          format: ' - #%h: %s %b'
-        }
-      ]
-    },
 
 
     // Generate README.md using verb
@@ -684,39 +656,6 @@ module.exports = function (grunt) {
           }
         ]
       }
-    },
-
-
-    // Generate ngdocs docs - https://github.com/m7r/grunt-ngdocs
-    ngdocs: {
-      options: {
-        title: "<%= pkg.name %> Docs",
-        dest: '<%= gc.buildDir %>/docs/ngdocs',
-        scripts: ['<%= gc.srcDir %>/**/*.js'],
-        startPage: '/api',
-        html5Mode: true
-        // image: "path/to/my/image.png",
-        // imageLink: "http://my-domain.com",
-        // titleLink: "/api",
-        // bestMatch: true,
-        // analytics: {
-        //   account: 'UA-08150815-0',
-        //   domainName: 'my-domain.com'
-        // },
-        // discussions: {
-        //   shortName: 'my',
-        //   url: 'http://my-domain.com',
-        //   dev: false
-        // }
-      },
-      // tutorial: {
-      //   src: ['content/tutorial/*.ngdoc'],
-      //   title: 'Tutorial'
-      // },
-      // api: {
-      //   src: ['src/**/*.js', '!src/**/*.spec.js'],
-      //   title: 'API Documentation'
-      // }
     },
 
 
@@ -868,8 +807,97 @@ module.exports = function (grunt) {
       options: {
         template: '{%=tag%}-{%=since%}-{%=object%}{%=dirty%}'
       }
-    }
+    },
 
+
+    /*
+    https://github.com/opentable/grunt-ccb
+    */
+    // ccb: {
+    //   options: {
+    //     jira: {
+    //       api_url: "https://company.atlassian.net/rest/api/2/",
+    //       proxy : null,
+    //       user: "user",
+    //       password: "password",
+    //       project_id: 12100,
+    //       ccb_issue_type: 20,
+    //       ccb_done_state: 11
+    //     },
+    //     project: {
+    //       name: "Location API",
+    //       version: "1.0.1"
+    //     },
+    //     manifest: "tests/data/manifest.json",
+    //     build_label: "project_123"
+    //   }
+    // },
+
+    /*
+    https://github.com/opentable/grunt-github-manifest
+    This plugin will grab the commit log from Github from a specified date, 
+    and store this to a file. The date is either hardcoded (using the 
+    commitHistoryStartDate.date property in the config) or retrieved from 
+    a http web service.
+    */
+    // create-manifest: {
+    //     options: {
+    //         commitHistoryStartDate: {
+    //             url: "http://localhost:3000/deployment-info",
+    //             path: "$.lastModifiedOn"
+    //             date: null
+    //         },
+    //         manifestPath: "commit_history.json",
+    //         github: {
+    //             o_auth_token: "XXXXXXXX",
+    //             user: "christriddle",
+    //             repo: "grunt-github-manifest",
+    //             proxy: null
+    //         }
+    //     }
+    // },
+
+    /*
+    https://github.com/opentable/grunt-package-github
+    Adds information from Github about this project to package.json
+    */
+    // package-github-data: {
+    //   options: {
+    //     github: {
+    //       user: "your_github_user",
+    //       repo: "your_github_repo",
+    //       o_auth_token: "your_github_o_auth_token"
+    //     }
+    //   }
+    // }
+
+    /*eslint-disable */
+    git_changelog: {  // jshint ignore:line
+    /*eslint-enable */
+      //cwd: '<%= gc.buildDir %>',
+      manifest: 'package.json',
+      history: '<%= gc.docsSrcDir %>/history.txt',
+      changelog: '<%= gc.docsSrcDir %>/verb/git-changelog.md',
+      changesSeparator: '\n\t*********',
+      masks: [
+        {
+          title: 'IMPLEMENTED:\n',
+          mask: /(([^\.]+\s)*(Task)(\s[^\.]+)*)/gim,
+          // see http://git-scm.com/docs/git-log for mapping content
+          format: ' - #%h %an %ad: %s %b'
+        },
+        {
+          title: 'FIXED:\n',
+          mask: /(([^\.]+\s)*(Bug)(\s[^\.]+)*)/gim,
+          format: ' - #%h %an %ad: %s %b'
+        },
+        {
+          title: 'OTHERS:\n',
+          mask: /./gim,
+          format: ' - #%h: %s %b'
+        }
+      ]
+    }
 
   });
 

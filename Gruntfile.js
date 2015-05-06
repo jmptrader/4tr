@@ -1,5 +1,6 @@
 /*jslint node: true */
 /*jshint strict:false */
+
 'use strict';
 
 module.exports = function (grunt) {
@@ -101,8 +102,8 @@ module.exports = function (grunt) {
   // Create global config (gc)
   var gc = {
     githubAccount: 'jwtd',
-    jiraUsername: process.env.VIRTRU_JIRA_UN,
-    jiraPassword: process.env.VIRTRU_JIRA_PW,
+    jiraUsername: process.env.JIRA_UN,
+    jiraPassword: process.env.JIRA_PW,
     // The following docServer properties will be used to run git clone <%= gs.docServer %>:<%= gs.docServerUser %>/<%= pkg.name %>-docs.git docs'
     docServer: 'repo@myHost.ing',
     docServerUser: 'no-user-specified',
@@ -740,6 +741,7 @@ module.exports = function (grunt) {
 
     // Push new version of docs to doc server using git
     exec: {
+      
       // Prevents running everything with grunt exec (that would be weird)
       blocker: {
         cmd: 'echo "Do not run grunt exec by itself" && exit 1'
